@@ -1,0 +1,2157 @@
+<!DOCTYPE html>
+<html lang="bn" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>এলাকার খবর | Elakar Khobor - বারুণা পশ্চিম পাড়া</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Fonts: Hind Siliguri for rich Bangla typography, Plus Jakarta Sans & Space Grotesk -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;800;900&family=Hind+Siliguri:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Three.js for continuous background 3D globe visualization -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Hind Siliguri"', '"Plus Jakarta Sans"', 'sans-serif'],
+            serifHead: ['"Cinzel"', 'serif'],
+            monoCode: ['"Space Grotesk"', 'monospace']
+          },
+          colors: {
+            brand: {
+              950: '#03060c',
+              900: '#060913',
+              850: '#0b1120',
+              800: '#0f172a',
+              700: '#1e293b',
+              600: '#334155',
+              crimson: '#e11d48',
+              rose: '#f43f5e',
+              amber: '#f59e0b',
+              cyan: '#06b6d4',
+              blue: '#3b82f6'
+            }
+          },
+          keyframes: {
+            marquee: {
+              '0%': { transform: 'translateX(0%)' },
+              '100%': { transform: 'translateX(-50%)' }
+            },
+            glowPulse: {
+              '0%, 100%': { opacity: '0.6', transform: 'scale(1)' },
+              '50%': { opacity: '0.9', transform: 'scale(1.04)' }
+            }
+          },
+          animation: {
+            marquee: 'marquee 32s linear infinite',
+            glowPulse: 'glowPulse 6s ease-in-out infinite'
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* 3D Perspective Container for news cards and typography */
+    .perspective-container {
+      perspective: 1200px;
+    }
+    
+    /* 3D Title Artistic Elevation & Layering */
+    .brand-3d-title {
+      text-shadow: 
+        0 1px 0 #9f1239,
+        0 2px 0 #881337,
+        0 3px 0 #4c0519,
+        0 5px 14px rgba(225, 29, 72, 0.45),
+        0 12px 30px rgba(0, 0, 0, 0.85);
+      letter-spacing: -0.02em;
+    }
+    
+    /* Interactive 3D Card base - Obsidian & Slate Palette */
+    .card-3d {
+      transform-style: preserve-3d;
+      transition: transform 0.15s ease-out, box-shadow 0.25s ease-out, border-color 0.25s ease-out;
+      will-change: transform;
+      background: linear-gradient(145deg, rgba(15, 23, 42, 0.88) 0%, rgba(11, 17, 32, 0.96) 100%);
+      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.75), 0 0 1px 1px rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(51, 65, 85, 0.5);
+    }
+    
+    .card-3d:hover {
+      box-shadow: 0 24px 50px -12px rgba(225, 29, 72, 0.25), 0 0 20px -2px rgba(244, 63, 94, 0.15), 0 0 1px 1px rgba(244, 63, 94, 0.4);
+      border-color: rgba(244, 63, 94, 0.5);
+    }
+
+    /* Secret 3D Card Glow - Classified Amber Vault */
+    .card-3d-secret {
+      transform-style: preserve-3d;
+      transition: transform 0.15s ease-out, box-shadow 0.25s ease-out, border-color 0.25s ease-out;
+      background: linear-gradient(145deg, rgba(20, 20, 28, 0.92) 0%, rgba(10, 12, 18, 0.98) 100%);
+      box-shadow: 0 10px 35px -10px rgba(245, 158, 11, 0.12), 0 0 1px 1px rgba(245, 158, 11, 0.25);
+      border: 1px solid rgba(245, 158, 11, 0.35);
+    }
+    .card-3d-secret:hover {
+      box-shadow: 0 22px 50px -10px rgba(245, 158, 11, 0.3), 0 0 20px -2px rgba(245, 158, 11, 0.2);
+      border-color: rgba(245, 158, 11, 0.6);
+    }
+
+    .content-3d {
+      transform: translateZ(26px);
+    }
+
+    /* Glass Navigation */
+    .glass-bar {
+      background: rgba(6, 9, 19, 0.92);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    /* Modal Animation */
+    @keyframes smoothModalPop {
+      0% { opacity: 0; transform: scale(0.96) translateY(14px); }
+      100% { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .modal-active-anim {
+      animation: smoothModalPop 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    /* Lead Pulse Indicator */
+    @keyframes leadPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(225, 29, 72, 0.5); }
+      50% { box-shadow: 0 0 0 8px rgba(225, 29, 72, 0); }
+    }
+    .lead-badge-pulse {
+      animation: leadPulse 2.5s infinite;
+    }
+  </style>
+</head>
+
+<body class="bg-[#060913] text-slate-100 font-sans antialiased min-h-screen selection:bg-brand-crimson selection:text-white">
+
+  <!-- MAIN NAVIGATION BAR -->
+  <header class="border-b border-slate-800 glass-bar sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 py-3.5 flex items-center justify-between">
+      
+      <!-- Brand Logo: 'এলাকার খবর' (Elakar Khobor) + 'বারুণা পশ্চিম পাড়া 24/7' -->
+      <a href="#" class="flex items-center gap-3.5 group">
+        <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-crimson via-rose-600 to-indigo-600 flex items-center justify-center shadow-lg shadow-rose-950/60 ring-1 ring-rose-400/30 group-hover:scale-105 transition-transform duration-300">
+          <i data-lucide="globe" class="w-7 h-7 text-white animate-spin" style="animation-duration: 24s;"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white font-sans group-hover:text-rose-200 transition-colors">
+              <span id="navBrandName">এলাকার খবর</span>
+            </h1>
+            <span id="navLocationBadge" class="text-[10px] font-mono tracking-wider px-2.5 py-0.5 rounded-md bg-brand-crimson/20 border border-rose-500/40 text-brand-rose font-bold uppercase hidden sm:inline-block">
+              বারুণা পশ্চিম পাড়া 24/7
+            </span>
+          </div>
+        </div>
+      </a>
+
+      <!-- Quick Section Links & Actions -->
+      <div class="flex items-center gap-2.5 sm:gap-4">
+        <a href="#generalNewsSection" class="hidden md:inline-flex items-center gap-1.5 text-sm font-semibold text-slate-200 hover:text-white px-3 py-1.5 transition">
+          <i data-lucide="newspaper" class="w-4 h-4 text-brand-rose"></i>
+          <span data-i18n="navPublicTitle">পাবলিক সংবাদ</span>
+        </a>
+        <a href="#secretNewsSection" class="hidden md:inline-flex items-center gap-1.5 text-sm font-semibold text-amber-400 hover:text-amber-300 px-3 py-1.5 transition">
+          <i data-lucide="shield-check" class="w-4 h-4 text-amber-400"></i>
+          <span data-i18n="navSecretTitle">গোপন সংবাদ</span>
+        </a>
+
+        <!-- Language Switcher -->
+        <div class="inline-flex p-1 rounded-xl bg-slate-900 border border-slate-800 shadow-inner">
+          <button id="btnLangBn" onclick="switchLanguage('bn')" class="px-3 py-1 text-xs font-bold rounded-lg transition-all duration-200 bg-brand-crimson text-white shadow">
+            বাংলা
+          </button>
+          <button id="btnLangEn" onclick="switchLanguage('en')" class="px-3 py-1 text-xs font-bold rounded-lg transition-all duration-200 text-slate-400 hover:text-white">
+            English
+          </button>
+        </div>
+
+        <!-- Submit News Button ("আপনার খবর দিন") -->
+        <button onclick="openTipModal()" class="inline-flex items-center gap-2 bg-gradient-to-r from-brand-crimson to-rose-600 hover:brightness-110 text-white font-bold text-xs sm:text-sm px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl shadow-lg shadow-rose-950/60 border border-rose-500/30 transform hover:-translate-y-0.5 active:translate-y-0 transition duration-200">
+          <i data-lucide="edit-3" class="w-4 h-4 text-rose-200"></i>
+          <span data-i18n="tipHeaderBtn">আপনার খবর দিন</span>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Breaking News Live Ticker (পশ্চিম পাড়া ব্রেকিং) -->
+    <div class="bg-slate-900/70 border-t border-slate-800/80 py-2 px-4 flex items-center overflow-hidden">
+      <div class="flex items-center gap-2 pr-4 bg-[#060913] z-10 shrink-0 font-extrabold text-xs text-brand-rose uppercase tracking-wider">
+        <span class="w-2.5 h-2.5 rounded-full bg-brand-rose animate-ping"></span>
+        <span id="breakingTickerLabel" data-i18n="tickerLabel">পশ্চিম পাড়া ব্রেকিং</span>:
+      </div>
+      <div class="relative overflow-hidden whitespace-nowrap w-full">
+        <div id="breakingTicker" class="inline-block animate-marquee text-xs font-semibold text-slate-200 space-x-12"></div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-8 py-8 space-y-16">
+
+    <!-- HERO SECTION: INTEGRATED 3D ART BACKGROUND & LARGE 3D TITLE & AUTO-SYNCING LEAD -->
+    <section class="relative rounded-3xl overflow-hidden border border-slate-800 bg-gradient-to-br from-slate-900 via-brand-850 to-[#04060b] shadow-2xl p-6 sm:p-10 lg:p-14 min-h-[540px] flex flex-col justify-between">
+      
+      <!-- Embedded 3D Canvas running smoothly inside Hero -->
+      <div id="globeCanvasContainer" class="absolute inset-0 z-0 opacity-55 sm:opacity-70 mix-blend-screen pointer-events-auto transition-opacity duration-700"></div>
+
+      <!-- Atmospheric Ambient Glows -->
+      <div class="absolute -top-32 -left-32 w-96 h-96 bg-brand-crimson/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
+
+      <!-- Top Metadata Header with Khulna Station Badge -->
+      <div class="relative z-10 flex flex-wrap items-center justify-end gap-4">
+        <div class="flex items-center gap-3 text-xs font-monoCode text-slate-300 bg-slate-950/85 backdrop-blur-md border border-slate-800 px-4 py-1.5 rounded-full shadow-lg">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span class="text-amber-400 font-bold" id="heroLiveKhulnaClock">--:--:--</span>
+          <span class="text-slate-600">|</span>
+          <span class="text-sky-300" id="heroKhulnaWeatherBadge">২৮° সে. খুলনা</span>
+          <span class="text-slate-600">|</span>
+          <span class="text-brand-rose font-bold" id="pingCounter">34</span> ms
+        </div>
+      </div>
+
+      <!-- PROMINENT 3D ARTISTIC TITLE OVERLAY ('এলাকার খবর') & DYNAMIC LEAD STORY -->
+      <div class="relative z-10 my-8 max-w-4xl space-y-4">
+        
+        <!-- Large 3D Artistic Headline Name: 'এলাকার খবর' -->
+        <div class="perspective-container">
+          <!-- Motto pill: সত্য ও ন্যায়ের পথে -->
+          <div class="inline-flex items-center gap-3 py-1 px-4 rounded-2xl bg-slate-950/60 backdrop-blur-md border border-slate-800/80 mb-3">
+            <span class="w-2 h-2 rounded-full bg-brand-rose animate-pulse"></span>
+            <span id="heroMottoText" class="text-xs font-mono tracking-widest text-slate-300 uppercase" data-i18n="artHeaderBadge">
+              সত্য ও ন্যায়ের পথে
+            </span>
+          </div>
+
+          <h2 id="mainArtHeroTitle" class="text-4xl sm:text-6xl lg:text-7xl font-black text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-100 to-rose-200 brand-3d-title leading-tight drop-shadow-2xl">
+            এলাকার খবর
+          </h2>
+          <p id="mainArtHeroSub" class="text-xs sm:text-sm font-bold tracking-widest text-brand-rose/90 uppercase font-monoCode">
+            ELAKAR KHOBOR • POSCHIM PARA
+          </p>
+        </div>
+
+        <!-- DYNAMIC LEAD STORY: AUTOMATICALLY ADOPTS NEWEST POSTED ARTICLE -->
+        <div class="pt-4 space-y-3">
+          <div class="flex items-center gap-2">
+            <span id="heroLeadCategoryPill" class="text-[11px] font-bold uppercase tracking-wider px-3 py-1 rounded-full bg-brand-crimson/25 border border-rose-500/50 text-rose-300">
+              <!-- Category dynamic -->
+            </span>
+            <span id="heroLeadTimePill" class="text-xs text-slate-400 font-mono flex items-center gap-1">
+              <i data-lucide="clock" class="w-3.5 h-3.5 text-brand-rose"></i>
+              <span id="heroLeadTimeText"></span>
+            </span>
+          </div>
+
+          <h3 id="heroHeadline" onclick="openHeroLeadArticle()" class="text-xl sm:text-3xl lg:text-4xl font-extrabold text-white leading-tight tracking-tight hover:text-rose-300 transition-colors cursor-pointer drop-shadow-md">
+            <!-- Populated by JS -->
+          </h3>
+          <p id="heroSummary" class="text-xs sm:text-base text-slate-300 leading-relaxed max-w-2xl drop-shadow">
+            <!-- Populated by JS -->
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Hero Footer Controls: Clean read button -->
+      <div class="relative z-10 pt-4 border-t border-slate-800/80 flex items-center justify-between">
+        <span class="text-xs text-slate-400 flex items-center gap-1.5">
+          <span class="w-2.5 h-2.5 rounded-full bg-brand-rose lead-badge-pulse"></span>
+          <span class="font-bold text-slate-200" data-i18n="heroPrompt">সর্বশেষ প্রধান প্রতিবেদন</span>
+        </span>
+
+        <button onclick="openHeroLeadArticle()" class="inline-flex items-center gap-2 text-xs sm:text-sm font-bold text-white bg-gradient-to-r from-brand-crimson to-rose-600 hover:brightness-110 px-6 py-3 rounded-xl shadow-lg shadow-rose-950/60 transition">
+          <span data-i18n="readLeadBtn">সম্পূর্ণ বিস্তারিত পড়ুন</span>
+          <i data-lucide="arrow-right" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+    </section>
+
+    <!-- SLIDER: আজকের এলাকা -->
+    <section class="space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-2.5 h-6 bg-brand-rose rounded-full"></div>
+          <div>
+            <h2 class="text-lg sm:text-xl font-extrabold text-white" data-i18n="sliderTitle">আজকের এলাকা</h2>
+          </div>
+        </div>
+        <div class="flex items-center gap-2">
+          <button onclick="scrollNewsCarousel(-1)" class="w-9 h-9 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition border border-slate-800 shadow" title="পূর্ববর্তী">
+            <i data-lucide="chevron-left" class="w-4 h-4"></i>
+          </button>
+          <button onclick="scrollNewsCarousel(1)" class="w-9 h-9 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition border border-slate-800 shadow" title="পরবর্তী">
+            <i data-lucide="chevron-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <div id="carouselContainer" class="flex gap-4 overflow-x-auto hide-scrollbar scroll-smooth py-2">
+        <!-- Injected by JavaScript -->
+      </div>
+    </section>
+
+    <!-- TWO EXPANDED CORE SECTIONS: PUBLIC NEWS & SECRET ROOM -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- ==============================================
+           SECTION 1: PUBLIC NEWS (With Local Landmarks)
+           ============================================== -->
+      <section id="generalNewsSection" class="lg:col-span-7 space-y-6">
+        
+        <div class="pb-4 border-b border-slate-800 flex flex-wrap items-center justify-between gap-4">
+          <div class="flex items-center gap-3">
+            <div class="w-3.5 h-8 bg-brand-crimson rounded-md shadow-lg shadow-rose-950/60"></div>
+            <div>
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight" data-i18n="publicHeader">
+                পাবলিক ও উন্মুক্ত সংবাদ
+              </h2>
+            </div>
+          </div>
+
+          <!-- Category Filter Pills with Local Landmarks -->
+          <div class="flex items-center gap-1.5 p-1 bg-slate-900/90 rounded-xl border border-slate-800 text-xs overflow-x-auto hide-scrollbar max-w-full">
+            <button onclick="filterPublicCategory('all')" class="cat-pill active px-3.5 py-1.5 rounded-lg text-white bg-brand-crimson font-bold transition whitespace-nowrap" data-cat="all" data-i18n="catAll">সবগুলো</button>
+            <button onclick="filterPublicCategory('muktir_dokan')" class="cat-pill px-3.5 py-1.5 rounded-lg text-slate-400 hover:text-white transition font-medium whitespace-nowrap" data-cat="muktir_dokan" data-i18n="catMuktirDokan">মুক্তির দোকান</button>
+            <button onclick="filterPublicCategory('obdar_matha')" class="cat-pill px-3.5 py-1.5 rounded-lg text-slate-400 hover:text-white transition font-medium whitespace-nowrap" data-cat="obdar_matha" data-i18n="catObdarMatha">ওয়াপদার মাথা</button>
+            <button onclick="filterPublicCategory('durga_mondir')" class="cat-pill px-3.5 py-1.5 rounded-lg text-slate-400 hover:text-white transition font-medium whitespace-nowrap" data-cat="durga_mondir" data-i18n="catDurgaMondir">দুর্গা মন্দির</button>
+          </div>
+        </div>
+
+        <!-- Expanded 3D Public News Grid -->
+        <div id="publicNewsGrid" class="perspective-container grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Populated by JavaScript with Interactive 3D tilt cards -->
+        </div>
+
+      </section>
+
+      <!-- ==============================================
+           SECTION 2: SECRET ROOM (গোপন সংবাদ)
+           ============================================== -->
+      <section id="secretNewsSection" class="lg:col-span-5 space-y-6">
+        
+        <div class="bg-gradient-to-b from-[#101524] via-[#0b101c] to-[#060913] border-2 border-amber-500/40 rounded-3xl p-6 sm:p-7 shadow-2xl relative overflow-hidden">
+          
+          <!-- Decorative amber blur -->
+          <div class="absolute -right-16 -top-16 w-52 h-52 bg-amber-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div class="flex items-start justify-between gap-4 mb-4">
+            <div>
+              <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[11px] font-black uppercase tracking-wider bg-amber-500/20 text-amber-300 border border-amber-500/50 mb-2">
+                <i data-lucide="lock" class="w-3.5 h-3.5 text-amber-400"></i>
+                <span data-i18n="secretBadgeTitle">CONFIDENTIAL VAULT // সুরক্ষিত ডকেট</span>
+              </span>
+              <h3 class="text-xl sm:text-2xl font-extrabold text-white" data-i18n="secretSectionHeading">
+                গোপন সংবাদ ও বিশেষ নথি
+              </h3>
+            </div>
+            
+            <div class="w-11 h-11 rounded-2xl bg-amber-500/15 border border-amber-500/40 flex items-center justify-center text-amber-400 shrink-0 shadow-lg">
+              <i data-lucide="shield-alert" class="w-6 h-6"></i>
+            </div>
+          </div>
+
+          <p class="text-xs sm:text-sm text-slate-300 leading-relaxed font-sans mb-6" data-i18n="secretSectionIntro">
+            এই ডকেটের তথ্যসমূহ অত্যন্ত গোপনীয় ও স্পর্শকাতর। সংবাদের সত্যতা বজায় রাখতে প্রতিটি ফাইল সুরক্ষিত রাখা হয়েছে। আপনি পড়তে চাইলে <strong class="text-amber-400">“পড়ার অনুমতি চান”</strong> বাটনে চাপ দিন। এডমিন অনুমোদন দিলে কার্ডটি সঙ্গে সঙ্গে ৩ডি উন্মুক্ত রূপ ধারণ করবে।
+          </p>
+
+          <!-- Expanded 3D Secret News List Container -->
+          <div id="secretNewsList" class="perspective-container space-y-5">
+            <!-- Populated by JavaScript with subtle 3D tilt cards -->
+          </div>
+
+          <!-- Secret Room Guarantee -->
+          <div class="mt-6 p-4 rounded-2xl bg-slate-950/90 border border-slate-800 text-xs text-slate-300 flex items-center gap-3">
+            <i data-lucide="key" class="w-5 h-5 text-amber-400 shrink-0"></i>
+            <span data-i18n="secretSecurityProtocol">
+              প্রত্যেক অনুরোধ সরাসরি এডমিন ডেস্কের অনুমতি প্রক্রিয়ায় যায়। অনুমোদনের পর ফাইলটি তাৎক্ষণিক দৃশ্যমান হয়।
+            </span>
+          </div>
+
+        </div>
+
+        <!-- CITIZEN JOURNALISM SUBMISSION CARD: "আপনার খবর দিন" -->
+        <div class="bg-gradient-to-br from-slate-900 to-[#0b101c] border border-slate-800 p-6 sm:p-7 rounded-3xl text-center space-y-4 shadow-xl">
+          <div class="w-14 h-14 rounded-2xl bg-brand-crimson/20 border border-brand-crimson/40 text-brand-rose mx-auto flex items-center justify-center shadow-lg">
+            <i data-lucide="send" class="w-7 h-7"></i>
+          </div>
+          <h4 class="text-lg font-bold text-white" data-i18n="whistleTitleLarge">আপনার খবর দিন</h4>
+          <p class="text-xs sm:text-sm text-slate-400 leading-relaxed" data-i18n="whistleDescLarge">
+            বারুণা পশ্চিম পাড়া কিংবা আপনার আশেপাশের কোনো গুরুত্বপূর্ণ ঘটনা, সমস্যা বা উন্নয়নমূলক খবর আমাদের পাঠাতে পারেন। এডমিন পর্যালোচনার পর তা দ্রুত পোর্টালে প্রকাশ করা হবে।
+          </p>
+          <button onclick="openTipModal()" class="w-full py-3 px-5 rounded-xl bg-slate-800 hover:bg-brand-crimson text-white font-extrabold text-xs uppercase tracking-wider transition shadow-lg flex items-center justify-center gap-2 border border-slate-700 hover:border-brand-crimson">
+            <i data-lucide="edit-3" class="w-4 h-4"></i>
+            <span data-i18n="whistleActionBtn">আপনার খবর পাঠান</span>
+          </button>
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="mt-24 border-t border-slate-800 bg-[#03060c] py-12 px-4 sm:px-8 text-xs text-slate-500">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
+      
+      <div class="flex items-center gap-3.5">
+        <div class="w-10 h-10 rounded-2xl bg-brand-crimson/20 border border-brand-rose/30 flex items-center justify-center text-brand-rose font-bold text-lg shadow">
+          এ
+        </div>
+        <div>
+          <span class="text-sm font-extrabold text-white tracking-wider" id="footerBrandTitle">এলাকার খবর (ELAKAR KHOBOR)</span>
+          <p class="text-[11px] text-slate-400" data-i18n="footerRights">© ২০২৬ এলাকার খবর। সর্বস্বত্ব সংরক্ষিত। বারুণা পশ্চিম পাড়ার স্বাধীন সংবাদপত্র।</p>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-5 text-slate-400">
+        <button onclick="openTipModal()" class="hover:text-rose-400 transition flex items-center gap-1.5">
+          <i data-lucide="edit-3" class="w-3.5 h-3.5 text-brand-rose"></i>
+          <span data-i18n="footerTipLink">আপনার খবর দিন</span>
+        </button>
+        <span>•</span>
+        <a href="#generalNewsSection" class="hover:text-white transition" data-i18n="footerScrollTop">শীর্ষে যান ↑</a>
+        <span>•</span>
+        
+        <!-- Discreet Keyhole for Admin Vault (Passcode: 1971 / admin123) -->
+        <button onclick="initiateAdminGate()" class="hover:text-amber-400 transition flex items-center gap-1.5 opacity-50 hover:opacity-100 group px-2.5 py-1 rounded-lg border border-slate-800 hover:border-amber-500/40" title="Admin Studio & Vault">
+          <i data-lucide="shield-check" class="w-3.5 h-3.5 text-amber-500/80 group-hover:text-amber-400"></i>
+          <span class="text-[10px] tracking-widest text-slate-400 group-hover:text-amber-300 font-mono font-bold">ADMIN DESK</span>
+        </button>
+      </div>
+
+    </div>
+  </footer>
+
+  <!-- MODAL 1: FULL ARTICLE READER -->
+  <div id="articleModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div class="bg-gradient-to-b from-slate-900 to-[#070b14] border border-slate-700 w-full max-w-3xl rounded-3xl overflow-hidden shadow-2xl modal-active-anim relative my-auto">
+      
+      <button onclick="closeArticleModal()" class="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-slate-950/80 hover:bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition border border-slate-700">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <div class="relative h-64 sm:h-84 w-full overflow-hidden bg-slate-950">
+        <img id="modalCoverImage" src="" alt="News Image" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent"></div>
+        <div class="absolute bottom-4 left-6 right-6">
+          <span id="modalCategoryBadge" class="px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-brand-crimson text-white shadow-md"></span>
+        </div>
+      </div>
+
+      <div class="p-6 sm:p-8 space-y-5">
+        <div class="flex items-center gap-3 text-xs text-slate-400">
+          <span id="modalDate" class="font-medium text-slate-300"></span>
+          <span>•</span>
+          <span class="flex items-center gap-1 text-slate-300">
+            <i data-lucide="book-open" class="w-3.5 h-3.5 text-brand-rose"></i>
+            <span data-i18n="readingTime">৩ মিনিট পাঠ্য</span>
+          </span>
+        </div>
+
+        <h2 id="modalTitle" class="text-xl sm:text-3xl font-extrabold text-white leading-tight"></h2>
+
+        <div class="flex items-center gap-3 py-3 border-y border-slate-800">
+          <div class="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center text-brand-rose border border-slate-700">
+            <i data-lucide="user" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div id="modalAuthor" class="text-xs sm:text-sm font-bold text-white"></div>
+            <div class="text-[11px] text-slate-400" data-i18n="modalDeskLabel">এলাকার খবর অনুসন্ধান টিম</div>
+          </div>
+        </div>
+
+        <div id="modalContent" class="text-slate-300 text-sm sm:text-base leading-relaxed space-y-4 pt-2"></div>
+
+        <div class="pt-6 border-t border-slate-800 flex items-center justify-between">
+          <button onclick="copyArticleLink()" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold border border-slate-700 transition">
+            <i data-lucide="share-2" class="w-4 h-4"></i>
+            <span data-i18n="copyLinkBtn">লিংক কপি করুন</span>
+          </button>
+          <button onclick="closeArticleModal()" class="px-5 py-2.5 rounded-xl bg-brand-crimson hover:bg-rose-600 text-white text-xs font-bold transition">
+            <span data-i18n="closeModalBtn">বন্ধ করুন</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MODAL 2: USER NEWS SUBMISSION ("আপনার খবর দিন") -->
+  <div id="tipModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-slate-900 border border-slate-800 w-full max-w-xl rounded-3xl p-6 sm:p-8 shadow-2xl modal-active-anim relative my-auto">
+      
+      <button onclick="closeTipModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-950 text-slate-400 hover:text-white flex items-center justify-center transition border border-slate-800">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-11 h-11 rounded-2xl bg-brand-crimson/20 text-brand-rose border border-brand-rose/30 flex items-center justify-center">
+          <i data-lucide="edit-3" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-white" data-i18n="tipModalTitle">আপনার খবর দিন</h3>
+          <p class="text-xs text-slate-400" data-i18n="tipModalSub">নাগরিক সাংবাদিকতা ও সংবাদ প্রেরণের মাধ্যম</p>
+        </div>
+      </div>
+
+      <div class="bg-slate-950 border border-slate-800 p-3.5 rounded-2xl mb-5 text-xs text-slate-300 flex items-start gap-2.5">
+        <i data-lucide="info" class="w-4 h-4 shrink-0 mt-0.5 text-brand-rose"></i>
+        <span data-i18n="tipModalNotice">
+          আপনার পাঠানো সংবাদ বা তথ্য সরাসরি আমাদের এডমিন ডেস্কে জমা হবে। সত্যতা যাচাই সাপেক্ষে তা পোর্টালে প্রকাশ করা হবে।
+        </span>
+      </div>
+
+      <form id="tipSubmissionForm" onsubmit="handleTipSubmit(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="tipFieldSubject">সংবাদের বিষয় বা শিরোনাম *</label>
+          <input type="text" id="tipSubject" required placeholder="উদাহরণ: ওয়াপদার মাথা বা মুক্তির দোকানে নতুন সড়ক সংস্কারের উদ্যোগ..." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-600 text-sm focus:outline-none focus:border-brand-crimson">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="tipFieldLocation">নির্দিষ্ট স্থান বা এলাকা</label>
+          <select id="tipLocationSelect" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-sm focus:outline-none focus:border-brand-crimson">
+            <option value="muktir_dokan">মুক্তির দোকান</option>
+            <option value="obdar_matha">ওয়াপদার মাথা</option>
+            <option value="durga_mondir">দুর্গা মন্দির</option>
+            <option value="general">পশ্চিম পাড়া সার্বিক</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="tipFieldDetails">সংবাদের বিস্তারিত বিবরণ *</label>
+          <textarea id="tipDetails" rows="4" required placeholder="স্থান, তারিখ ও ঘটনার স্পষ্ট বিবরণ লিখুন..." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-600 text-sm focus:outline-none focus:border-brand-crimson"></textarea>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="tipFieldSender">আপনার নাম (ঐচ্ছিক)</label>
+            <input type="text" id="tipSender" placeholder="নাম লিখুন" class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-600 text-xs focus:outline-none focus:border-brand-crimson">
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="tipFieldContact">যোগাযোগের নম্বর বা ইমেইল (ঐচ্ছিক)</label>
+            <input type="text" id="tipContact" placeholder="ফোন নম্বর / ইমেইল" class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-600 text-xs focus:outline-none focus:border-brand-crimson">
+          </div>
+        </div>
+
+        <button type="submit" class="w-full py-3 rounded-xl bg-brand-crimson hover:bg-rose-600 text-white font-extrabold text-sm shadow-lg shadow-rose-950/60 flex items-center justify-center gap-2 transition">
+          <i data-lucide="send" class="w-4 h-4"></i>
+          <span data-i18n="tipSubmitBtn">সংবাদ জমা দিন</span>
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- MODAL 3: REQUEST PERMISSION TO READ SECRET NEWS -->
+  <div id="requestSecretModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="bg-slate-900 border border-amber-500/40 w-full max-w-md rounded-3xl p-6 sm:p-7 shadow-2xl modal-active-anim relative">
+      
+      <button onclick="closeRequestSecretModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-950 text-slate-400 hover:text-white flex items-center justify-center transition border border-slate-800">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+
+      <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 text-amber-400 mx-auto flex items-center justify-center mb-3">
+        <i data-lucide="key" class="w-6 h-6"></i>
+      </div>
+
+      <h3 class="text-center text-lg font-bold text-white mb-1" data-i18n="reqModalTitle">গোপন খবর পড়ার অনুমতি চান</h3>
+      <p id="requestModalNewsTitle" class="text-center text-xs text-amber-300 font-semibold mb-4 px-2"></p>
+
+      <form id="secretRequestForm" onsubmit="submitSecretAccessRequest(event)" class="space-y-4">
+        <input type="hidden" id="requestSecretId" value="">
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="reqFieldName">আপনার পুরো নাম *</label>
+          <input type="text" id="reqUserName" required placeholder="আপনার নাম..." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-sm focus:outline-none focus:border-amber-400">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="reqFieldContact">ইমেইল বা ফোন *</label>
+          <input type="text" id="reqUserContact" required placeholder="ইমেইল বা মোবাইল নম্বর" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-sm focus:outline-none focus:border-amber-400">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1" data-i18n="reqFieldReason">পড়ার কারণ বা উদ্দেশ্য</label>
+          <textarea id="reqUserReason" rows="2" placeholder="অনুসন্ধানমূলক যাচাই / তথ্য বিশ্লেষণ..." class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-amber-400"></textarea>
+        </div>
+
+        <div class="p-3 bg-slate-950/80 rounded-xl text-xs text-slate-400 border border-slate-800 flex items-center gap-2">
+          <i data-lucide="shield" class="w-4 h-4 text-brand-rose shrink-0"></i>
+          <span data-i18n="reqNote">অনুরোধ পাঠানো মাত্রই এডমিন প্যানেলে যাবে। এডমিন Approve করলে সাথে সাথে আপনি পড়তে পারবেন।</span>
+        </div>
+
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg shadow-amber-500/20">
+          <span data-i18n="reqSubmitBtn">অনুমতির অনুরোধ পাঠান</span>
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- MODAL 4: ADMIN GATEWAY / AUTHENTICATION MODAL (PROTECTED) -->
+  <div id="adminAuthModal" class="fixed inset-0 z-50 bg-black/90 backdrop-blur-md hidden items-center justify-center p-4">
+    <div class="bg-slate-950 border border-slate-800 w-full max-w-sm rounded-3xl p-6 sm:p-7 shadow-2xl modal-active-anim relative text-center">
+      
+      <button onclick="closeAdminAuthModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-900 text-slate-400 hover:text-white flex items-center justify-center transition border border-slate-800">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+
+      <div class="w-14 h-14 rounded-2xl bg-amber-500/15 border border-amber-500/30 text-amber-400 mx-auto flex items-center justify-center mb-3">
+        <i data-lucide="shield-check" class="w-7 h-7"></i>
+      </div>
+
+      <h3 class="text-lg font-bold text-white mb-1" data-i18n="authModalTitle">এডমিন ভল্ট ও পাবলিশিং এক্সেস</h3>
+      <p class="text-xs text-slate-400 mb-5" data-i18n="authModalSub">এটি কেবল ওয়েবসাইট মালিক ও অনুমোদিত এডমিনের জন্য সংরক্ষিত</p>
+
+      <form id="adminPassForm" onsubmit="handleAdminLogin(event)" class="space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1.5 text-left" data-i18n="authPassLabel">গোপন এডমিন পাসকোড দিন *</label>
+          <input type="password" id="adminPasscode" required placeholder="PIN বা পাসকোড..." class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-white placeholder-slate-600 text-center tracking-widest font-mono text-base focus:outline-none focus:border-amber-400">
+          <p class="text-[10px] text-slate-500 mt-1 text-left font-mono">মাস্টার কোড: 1971 বা admin123</p>
+        </div>
+
+        <button type="submit" class="w-full py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs uppercase tracking-wider transition shadow-lg shadow-amber-500/30 flex items-center justify-center gap-1.5">
+          <i data-lucide="unlock" class="w-4 h-4"></i>
+          <span data-i18n="authSubmitBtn">ভল্ট আনলক করুন</span>
+        </button>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- MODAL 5: SECURE ADMIN CONTROL STUDIO (POST NEWS + APPROVALS + INBOX) -->
+  <div id="adminPanelModal" class="fixed inset-0 z-50 bg-black/92 backdrop-blur-md hidden items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div class="bg-[#0b101d] border border-amber-500/40 w-full max-w-4xl rounded-3xl p-6 sm:p-8 shadow-2xl modal-active-anim relative my-auto">
+      
+      <div class="flex items-center justify-between pb-4 border-b border-slate-800 mb-6">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
+            <i data-lucide="newspaper" class="w-6 h-6"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="text-lg font-bold text-white" data-i18n="adminPanelHeading">এডমিন পাবলিশিং ও কন্ট্রোল ডেস্ক</h3>
+              <span class="text-[10px] bg-amber-500/20 text-amber-300 font-mono px-2 py-0.5 rounded border border-amber-500/40 font-bold">OWNER STUDIO</span>
+            </div>
+            <p class="text-xs text-slate-400" data-i18n="adminPanelSub">নতুন খবর পোস্ট করলে তা সরাসরি ‘সর্বশেষ প্রধান প্রতিবেদন’ হিসেবে যুক্ত হবে</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <!-- Secure Logout Button -->
+          <button onclick="handleAdminLogout()" class="px-3 py-1.5 rounded-xl bg-rose-950/60 hover:bg-rose-900 text-rose-300 text-xs font-semibold flex items-center gap-1 border border-rose-800/50 transition">
+            <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+            <span data-i18n="adminLogoutBtn">লগআউট</span>
+          </button>
+          <button onclick="closeAdminPanel()" class="w-8 h-8 rounded-full bg-slate-900 text-slate-400 hover:text-white flex items-center justify-center transition border border-slate-800">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs inside Admin Drawer -->
+      <div class="flex border-b border-slate-800 mb-6 gap-2 overflow-x-auto hide-scrollbar">
+        <!-- Tab 1: Publish News Studio -->
+        <button id="tabBtnPublish" onclick="switchAdminTab('publish')" class="px-4 py-2 border-b-2 border-brand-crimson text-brand-rose text-xs font-bold flex items-center gap-2 whitespace-nowrap">
+          <i data-lucide="plus-circle" class="w-4 h-4"></i>
+          <span data-i18n="adminTabPublish">নতুন খবর পোস্ট করুন (Publish News)</span>
+        </button>
+
+        <!-- Tab 2: Secret Requests -->
+        <button id="tabBtnRequests" onclick="switchAdminTab('requests')" class="px-4 py-2 border-b-2 border-transparent text-slate-400 hover:text-white text-xs font-bold flex items-center gap-2 whitespace-nowrap">
+          <i data-lucide="user-check" class="w-4 h-4"></i>
+          <span data-i18n="adminTabReq">গোপন সংবাদের অনুমতি রিকোয়েস্ট</span>
+          <span id="badgeAdminRequests" class="bg-amber-500 text-black font-black text-[10px] px-1.5 rounded-full">0</span>
+        </button>
+
+        <!-- Tab 3: Reader Tips -->
+        <button id="tabBtnTips" onclick="switchAdminTab('tips')" class="px-4 py-2 border-b-2 border-transparent text-slate-400 hover:text-white text-xs font-bold flex items-center gap-2 whitespace-nowrap">
+          <i data-lucide="inbox" class="w-4 h-4"></i>
+          <span data-i18n="adminTabTips">পাঠক প্রেরিত সংবাদ (Inbox)</span>
+          <span id="badgeAdminTips" class="bg-brand-rose text-white font-black text-[10px] px-1.5 rounded-full">0</span>
+        </button>
+      </div>
+
+      <!-- TAB 1: PUBLISH NEWS STUDIO (AUTO-SET AS MAIN LEAD) -->
+      <div id="adminTabPublishContent" class="space-y-5 max-h-[62vh] overflow-y-auto pr-2">
+        <div class="bg-gradient-to-r from-brand-crimson/20 via-slate-900 to-slate-950 p-4 rounded-2xl border border-rose-500/30 flex items-center justify-between">
+          <div class="space-y-1">
+            <h4 class="text-sm font-bold text-white flex items-center gap-2">
+              <i data-lucide="sparkles" class="w-4 h-4 text-brand-rose"></i>
+              <span>সর্বশেষ প্রধান প্রতিবেদন অটো-আপডেট সিস্টেম</span>
+            </h4>
+            <p class="text-xs text-slate-300">
+              এখানে পোস্ট করা সংবাদটি তাৎক্ষণিকভাবে হোমপেজের <strong>"সর্বশেষ প্রধান প্রতিবেদন"</strong> হিসেবে স্থান পাবে এবং ব্রেকিং টিকারেও যুক্ত হবে।
+            </p>
+          </div>
+          <span class="text-[11px] font-mono font-bold bg-brand-crimson text-white px-2.5 py-1 rounded-lg shrink-0">AUTO-LEAD ACTIVE</span>
+        </div>
+
+        <form id="adminPostNewsForm" onsubmit="handleAdminPublishArticle(event)" class="space-y-4">
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            
+            <div class="md:col-span-2">
+              <label class="block text-xs font-semibold text-slate-300 mb-1">সংবাদের শিরোনাম *</label>
+              <input type="text" id="adminPostTitle" required placeholder="উদাহরণ: মুক্তির দোকান সংলগ্ন সড়কে ড্রেনেজ ব্যবস্থার আধুনিকায়ন শুরু..." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-600 text-sm focus:outline-none focus:border-brand-crimson">
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">এলাকা ক্যাটাগরি *</label>
+              <select id="adminPostCategory" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-white text-sm focus:outline-none focus:border-brand-crimson">
+                <option value="muktir_dokan">মুক্তির দোকান</option>
+                <option value="obdar_matha">ওয়াপদার মাথা</option>
+                <option value="durga_mondir">দুর্গা মন্দির</option>
+                <option value="general">পশ্চিম পাড়া সার্বিক</option>
+              </select>
+            </div>
+
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">সংক্ষিপ্ত বিবরণ (Hero Summary) *</label>
+            <textarea id="adminPostSummary" rows="2" required placeholder="প্রধান পেজের বড় শিরোনামের নিচে দুই-তিন লাইনের আকর্ষণীয় সারসংক্ষেপ..." class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-600 text-xs sm:text-sm focus:outline-none focus:border-brand-crimson"></textarea>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-slate-300 mb-1">সম্পূর্ণ প্রতিবেদন / বিশদ সংবাদ *</label>
+            <textarea id="adminPostFullText" rows="4" required placeholder="বিস্তারিত খবর লিখুন (অনুচ্ছেদ পৃথক করতে ডাবল এন্টার চাপুন)..." class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-600 text-xs sm:text-sm focus:outline-none focus:border-brand-crimson"></textarea>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">ছবির লিংক (Image URL)</label>
+              <input type="url" id="adminPostImage" placeholder="https://images.unsplash.com/..." class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white placeholder-slate-600 text-xs focus:outline-none focus:border-brand-crimson">
+              <div class="flex items-center gap-1.5 mt-1.5 text-[10px] text-slate-400">
+                <span>দ্রুত স্যাম্পল:</span>
+                <button type="button" onclick="setPresetImg(1)" class="text-brand-rose underline">রাস্তা</button> •
+                <button type="button" onclick="setPresetImg(2)" class="text-brand-rose underline">বাজার</button> •
+                <button type="button" onclick="setPresetImg(3)" class="text-brand-rose underline">উন্নয়ন</button>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">প্রতিবেদক / রিপোর্টার নাম</label>
+              <input type="text" id="adminPostAuthor" value="পশ্চিম পাড়া বিশেষ ব্যুরো" placeholder="রিপোর্টার বা বিশেষ সংবাদদাতা" class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-800 text-white text-xs focus:outline-none focus:border-brand-crimson">
+            </div>
+          </div>
+
+          <!-- Lead Promotion Checkbox (Checked by Default) -->
+          <div class="p-3.5 bg-slate-950/80 rounded-2xl border border-slate-800 flex items-center justify-between">
+            <label class="flex items-center gap-2.5 cursor-pointer">
+              <input type="checkbox" id="adminCheckSetLead" checked class="w-4 h-4 rounded text-brand-crimson accent-brand-crimson focus:ring-0">
+              <span class="text-xs font-bold text-white">পোস্ট করার সাথে সাথে ‘সর্বশেষ প্রধান প্রতিবেদন’ হিসেবে সেট করুন</span>
+            </label>
+            <span class="text-[11px] text-emerald-400 font-mono flex items-center gap-1">
+              <i data-lucide="check" class="w-3.5 h-3.5"></i> রিকমেন্ডেড
+            </span>
+          </div>
+
+          <button type="submit" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-brand-crimson to-rose-600 hover:brightness-110 text-white font-extrabold text-sm shadow-xl shadow-rose-950/60 flex items-center justify-center gap-2 transition">
+            <i data-lucide="send" class="w-4 h-4"></i>
+            <span>খবরটি প্রকাশ করুন ও প্রধান প্রতিবেদনে যুক্ত করুন</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- TAB 2: SECRET REQUESTS MODERATION -->
+      <div id="adminTabRequestsContent" class="hidden space-y-4 max-h-[60vh] overflow-y-auto pr-2">
+        <p class="text-xs text-slate-400" data-i18n="adminReqGuidance">
+          যেসব পাঠক গোপন খবর পড়ার রিকোয়েস্ট দিয়েছেন তাদের তালিকা নিচে দেওয়া হলো। আপনি “অনুমোদন দিন (Approve)” বাটনে চাপ দিলে তারা তাৎক্ষণিকভাবে খবরটি দেখতে পাবেন।
+        </p>
+        <div id="adminRequestsList" class="space-y-3">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+      <!-- TAB 3: READER TIPS INBOX (One-Click Promote to Public/Lead) -->
+      <div id="adminTabTipsContent" class="hidden space-y-4 max-h-[60vh] overflow-y-auto pr-2">
+        <div class="bg-slate-900 border border-brand-rose/30 p-3.5 rounded-xl text-xs text-slate-300 flex items-center gap-2">
+          <i data-lucide="shield" class="w-4 h-4 shrink-0 text-brand-rose"></i>
+          <span data-i18n="adminTipsDisclaimer">কনফিডেনশিয়াল ভল্ট: সাধারণ পাঠকদের পাঠানো খবরগুলো এখানে জমা রয়েছে। আপনি চাইলে এখান থেকে এক ক্লিকেই প্রধান প্রতিবেদন বা পাবলিক সংবাদে যুক্ত করতে পারেন।</span>
+        </div>
+        <div id="adminTipsList" class="space-y-3">
+          <!-- Rendered by JS -->
+        </div>
+      </div>
+
+      <div class="mt-6 pt-4 border-t border-slate-800 flex items-center justify-between text-xs">
+        <div class="text-slate-400">
+          <span data-i18n="adminStatusText">স্ট্যাটাস:</span> <span class="text-brand-rose font-semibold">Active & Live Published Engine</span>
+        </div>
+        <button onclick="closeAdminPanel()" class="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-white rounded-xl font-bold border border-slate-800">
+          <span data-i18n="adminCloseBtn">প্যানেল বন্ধ করুন</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <div id="customToast" class="fixed bottom-6 right-6 z-50 transform translate-y-24 opacity-0 transition-all duration-300 bg-slate-900 border border-slate-800 text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3">
+    <div id="toastIconContainer" class="w-8 h-8 rounded-full bg-brand-crimson/20 text-brand-rose flex items-center justify-center">
+      <i data-lucide="check" class="w-4 h-4"></i>
+    </div>
+    <span id="toastMessage" class="text-xs font-semibold"></span>
+  </div>
+
+  <script>
+    // 1. Core State
+    let currentLang = 'bn'; 
+    let activePublicCat = 'all';
+
+    // Admin Session State
+    let isAdminAuthenticated = false;
+    const ADMIN_PASSCODES = ['1971', 'admin123'];
+
+    // Khulna Real-Time Weather State
+    const khulnaWeatherData = {
+      tempC: 28,
+      conditionBn: "আংশিক মেঘলা ও মনোরম বাতাস",
+      conditionEn: "Partly Cloudy • Gentle Breeze"
+    };
+
+    // Bilingual Dictionary
+    const translations = {
+      navPublicTitle: { bn: "পাবলিক সংবাদ", en: "Public News" },
+      navSecretTitle: { bn: "গোপন সংবাদ", en: "Secret News" },
+      tipHeaderBtn: { bn: "আপনার খবর দিন", en: "Submit News" },
+      tickerLabel: { bn: "পশ্চিম পাড়া ব্রেকিং", en: "POSCHIM PARA BREAKING" },
+      artHeaderBadge: { bn: "সত্য ও ন্যায়ের পথে", en: "ON THE PATH OF TRUTH & JUSTICE" },
+      heroPrompt: { bn: "সর্বশেষ প্রধান প্রতিবেদন", en: "Latest Lead Headline" },
+      readLeadBtn: { bn: "সম্পূর্ণ বিস্তারিত পড়ুন", en: "Read Full Story" },
+      sliderTitle: { bn: "আজকের এলাকা", en: "TODAY'S ELAKA" },
+      publicHeader: { bn: "পাবলিক ও উন্মুক্ত সংবাদ", en: "Public & General News" },
+      catAll: { bn: "সবগুলো", en: "All" },
+      catMuktirDokan: { bn: "মুক্তির দোকান", en: "Muktir Dokan" },
+      catObdarMatha: { bn: "ওয়াপদার মাথা", en: "Wapdar Matha" },
+      catDurgaMondir: { bn: "দুর্গা মন্দির", en: "Durga Mondir" },
+      secretBadgeTitle: { bn: "CONFIDENTIAL VAULT // সুরক্ষিত ডকেট", en: "CONFIDENTIAL VAULT // CLASSIFIED" },
+      secretSectionHeading: { bn: "গোপন সংবাদ ও বিশেষ নথি", en: "Secret News & Classified Files" },
+      secretSectionIntro: {
+        bn: "এই ডকেটের তথ্যসমূহ অত্যন্ত গোপনীয় ও স্পর্শকাতর। সংবাদের সত্যতা বজায় রাখতে প্রতিটি ফাইল সুরক্ষিত রাখা হয়েছে। আপনি পড়তে চাইলে “পড়ার অনুমতি চান” বাটনে চাপ দিন। এডমিন অনুমোদন দিলে কার্ডটি সঙ্গে সঙ্গে ৩ডি উন্মুক্ত রূপ ধারণ করবে।",
+        en: "These findings contain sensitive records. Click 'Request Access' below. Once the administrator approves your clearance, the card will instantly unlock and display the full story."
+      },
+      secretSecurityProtocol: {
+        bn: "প্রত্যেক অনুরোধ সরাসরি এডমিন ডেস্কের অনুমতি প্রক্রিয়ায় যায়। অনুমোদনের পর ফাইলটি তাৎক্ষণিক দৃশ্যমান হয়।",
+        en: "Clearance requests are routed securely to the Chief Admin moderation desk."
+      },
+      whistleTitleLarge: { bn: "আপনার খবর দিন", en: "Submit Your News" },
+      whistleDescLarge: {
+        bn: "বারুণা পশ্চিম পাড়া কিংবা আপনার আশেপাশের কোনো গুরুত্বপূর্ণ ঘটনা, সমস্যা বা উন্নয়নমূলক খবর আমাদের পাঠাতে পারেন। এডমিন পর্যালোচনার পর তা দ্রুত পোর্টালে প্রকাশ করা হবে।",
+        en: "Share local events, community issues, or eyewitness reports with our editorial desk. Submissions are reviewed directly by our administration."
+      },
+      whistleActionBtn: { bn: "আপনার খবর পাঠান", en: "Send Your News" },
+      footerRights: { bn: "© ২০২৬ এলাকার খবর। সর্বস্বত্ব সংরক্ষিত। বারুণা পশ্চিম পাড়ার স্বাধীন সংবাদপত্র।", en: "© 2026 Elakar Khobor. All Rights Reserved. Baruna Poschim Para Edition." },
+      footerTipLink: { bn: "আপনার খবর দিন", en: "Submit News" },
+      footerScrollTop: { bn: "শীর্ষে যান ↑", en: "Back to Top ↑" },
+      readingTime: { bn: "৩ মিনিট পাঠ্য", en: "3 min read" },
+      modalDeskLabel: { bn: "এলাকার খবর অনুসন্ধান টিম", en: "Elakar Khobor Investigative Desk" },
+      copyLinkBtn: { bn: "লিংক কপি করুন", en: "Copy Story Link" },
+      closeModalBtn: { bn: "বন্ধ করুন", en: "Close" },
+      tipModalTitle: { bn: "আপনার খবর দিন", en: "Submit Your News" },
+      tipModalSub: { bn: "নাগরিক সাংবাদিকতা ও সংবাদ প্রেরণের মাধ্যম", en: "Citizen Journalism & Community Submissions" },
+      tipModalNotice: {
+        bn: "আপনার পাঠানো সংবাদ বা তথ্য সরাসরি আমাদের এডমিন ডেস্কে জমা হবে। সত্যতা যাচাই সাপেক্ষে তা পোর্টালে প্রকাশ করা হবে।",
+        en: "Your news report will be sent directly to the editorial administration desk for review and publication."
+      },
+      tipFieldSubject: { bn: "সংবাদের বিষয় বা শিরোনাম *", en: "Headline or Subject *" },
+      tipFieldLocation: { bn: "নির্দিষ্ট স্থান বা এলাকা", en: "Location Landmark" },
+      tipFieldDetails: { bn: "সংবাদের বিস্তারিত বিবরণ *", en: "Event Details & Description *" },
+      tipFieldSender: { bn: "আপনার নাম (ঐচ্ছিক)", en: "Your Name (Optional)" },
+      tipFieldContact: { bn: "যোগাযোগের নম্বর বা ইমেইল (ঐচ্ছিক)", en: "Contact Phone or Email (Optional)" },
+      tipSubmitBtn: { bn: "সংবাদ জমা দিন", en: "Submit News" },
+      reqModalTitle: { bn: "গোপন খবর পড়ার অনুমতি চান", en: "Request Reading Clearance" },
+      reqFieldName: { bn: "আপনার পুরো নাম *", en: "Your Full Name *" },
+      reqFieldContact: { bn: "ইমেইল বা ফোন *", en: "Email or Phone Number *" },
+      reqFieldReason: { bn: "পড়ার কারণ বা উদ্দেশ্য", en: "Research Justification / Purpose" },
+      reqNote: {
+        bn: "অনুরোধ পাঠানো মাত্রই এডমিন প্যানেলে যাবে। এডমিন Approve করলে সাথে সাথে আপনি পড়তে পারবেন।",
+        en: "Your request will be queued in the Admin Desk. As soon as approved, the story unlocks."
+      },
+      reqSubmitBtn: { bn: "অনুমতির অনুরোধ পাঠান", en: "Submit Clearance Request" },
+      authModalTitle: { bn: "এডমিন ভল্ট ও পাবলিশিং এক্সেস", en: "Admin Vault & Publishing Gateway" },
+      authModalSub: { bn: "এটি কেবল ওয়েবসাইট মালিক ও অনুমোদিত এডমিনের জন্য সংরক্ষিত", en: "Restricted strictly for site owner and verified administration" },
+      authPassLabel: { bn: "গোপন এডমিন পাসকোড দিন *", en: "Enter Admin Passcode *" },
+      authSubmitBtn: { bn: "ভল্ট আনলক করুন", en: "Unlock Vault" },
+      adminLogoutBtn: { bn: "লগআউট", en: "Logout" },
+      adminPanelHeading: { bn: "এডমিন পাবলিশিং ও কন্ট্রোল ডেস্ক", en: "Chief Admin Publishing & Moderation Console" },
+      adminPanelSub: { bn: "নতুন খবর পোস্ট করলে তা সরাসরি ‘সর্বশেষ প্রধান প্রতিবেদন’ হিসেবে যুক্ত হবে", en: "Newly published articles automatically become the Lead Headline News" },
+      adminTabPublish: { bn: "নতুন খবর পোস্ট করুন (Publish News)", en: "Publish New Article (Auto-Lead)" },
+      adminTabReq: { bn: "গোপন সংবাদের অনুমতি রিকোয়েস্ট", en: "Secret News Clearance Requests" },
+      adminTabTips: { bn: "পাঠক প্রেরিত সংবাদ (Inbox)", en: "Reader Submissions (Inbox)" },
+      adminReqGuidance: {
+        bn: "যেসব পাঠক গোপন খবর পড়ার রিকোয়েস্ট দিয়েছেন তাদের তালিকা নিচে দেওয়া হলো। আপনি “অনুমোদন দিন (Approve)” বাটনে চাপ দিলে তারা তাৎক্ষণিকভাবে খবরটি দেখতে পাবেন।",
+        en: "Readers requesting clearance for classified stories. Clicking 'Approve' immediately unlocks the file for viewing."
+      },
+      adminTipsDisclaimer: {
+        bn: "ইনবক্স: পাঠকদের পাঠানো খবরগুলো এখানে জমা হয়। যাচাই শেষে পোর্টালে যুক্ত করতে পারেন।",
+        en: "INBOX: Reader-submitted local stories are stored here for editorial review."
+      },
+      adminStatusText: { bn: "স্ট্যাটাস:", en: "Status:" },
+      adminCloseBtn: { bn: "প্যানেল বন্ধ করুন", en: "Close Studio" }
+    };
+
+    // Default Public Articles (Categorized by Local Landmarks)
+    const initialArticles = [
+      {
+        id: "post_init_1",
+        category: "muktir_dokan",
+        badge: { bn: "মুক্তির দোকান স্পেশাল", en: "Muktir Dokan Special" },
+        title: {
+          bn: "মুক্তির দোকান মোড়ে আধুনিক ড্রেনেজ ও সংযোগ সড়কের কাজ সমাপ্ত: দূর হলো বর্ষার দীর্ঘদিনের জলাবদ্ধতা",
+          en: "Modern Drainage & Road Resurfacing Completed at Muktir Dokan: Longstanding Waterlogging Resolved"
+        },
+        summary: {
+          bn: "পশ্চিম পাড়ার অন্যতম প্রাণকেন্দ্র মুক্তির দোকান এলাকায় দীর্ঘদিনের জলাবদ্ধতা নিরসনে নতুন ড্রেন ও মসৃণ কার্পেটিং শেষ হয়েছে। স্থানীয় ব্যবসায়ী ও সাধারণ পথচারীদের মাঝে ফিরেছে স্বস্তি।",
+          en: "Major infrastructure completion at Muktir Dokan intersection completely eradicates seasonal waterlogging with new reinforced drains and smooth asphalt."
+        },
+        fullText: {
+          bn: "বারুণা পশ্চিম পাড়ার ব্যস্ততম মোড় মুক্তির দোকান এলাকায় দীর্ঘদিনের জলাবদ্ধতা ও ভাঙাচোরা সড়কের স্থায়ী সমাধান হলো। স্থানীয় প্রকৌশল অধিদপ্তর ও গণ্যমান্য ব্যক্তিবর্গের উপস্থিতিতে আজ সকালে নবনির্মিত ড্রেনেজ ও সংস্কারকৃত পাকা সড়কের আনুষ্ঠানিক উন্মোচন করা হয়।\n\nদোকানমালিক ও এলাকাবাসী জানান, সামান্য বৃষ্টিতেই আগে এখানে হাঁটু পানি জমে যেত এবং ব্যবসা-বাণিজ্য স্থবির হয়ে পড়ত। নতুন এই ড্রেনেজ ব্যবস্থার কারণে পানি দ্রুত নিষ্কাশিত হয়ে মূল খালে চলে যাচ্ছে। ফলে শিক্ষার্থী ও পথচারীরা এখন নিরাপদে যাতায়াত করতে পারছেন।",
+          en: "The historic bottleneck at Muktir Dokan intersection has received a comprehensive overhaul with modern storm drainage and heavy-duty asphalt resurfacing.\n\nLocal shopkeepers and residents praised the initiative, which now channels stormwater efficiently to the main canal, restoring seamless access for commuters and school students."
+        },
+        image: "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1200&q=80",
+        author: { bn: "পশ্চিম পাড়া ব্যুরো", en: "Poschim Para Bureau" },
+        date: { bn: "আজ, সকাল ১০:১৫", en: "Today, 10:15 AM" }
+      },
+      {
+        id: "post_init_2",
+        category: "obdar_matha",
+        badge: { bn: "ওয়াপদার মাথা", en: "Wapdar Matha" },
+        title: {
+          bn: "ওয়াপদার মাথায় নবনির্মিত সৌর বিদ্যুৎ চালিত সোলার স্ট্রিট লাইট উদ্বোধন: রাতে এলাকায় স্বস্তি",
+          en: "Solar-Powered Intelligent Streetlight Grid Commissioned at Wapdar Matha"
+        },
+        summary: {
+          bn: "রাতের আঁধারে চলাচলের ঝুঁকি কমাতে ওয়াপদার মাথায় ১২টি স্বয়ংক্রিয় সোলার লাইট স্থাপন করা হয়েছে। এর ফলে স্থানীয়দের নিরাপত্তা জোরদার হয়েছে।",
+          en: "Twelve automated solar LED poles deployed around the Wapdar Matha intersection, ensuring zero dark zones and heightened pedestrian security."
+        },
+        fullText: {
+          bn: "ওয়াপদার মাথা থেকে পশ্চিম পাড়া প্রধান প্রবেশমুখ পর্যন্ত দীর্ঘদিন ধরে রাতের আলো না থাকায় সাধারণ পথচারীরা চরম নিরাপত্তাহীনতায় ভুগতেন। স্থানীয় তরুণদের বিশেষ সামাজিক উদ্যোগে এবং প্রবাসীদের সহযোগিতায় আজ একযোগে ১২টি আধুনিক সোলার এলইডি বাতি চালু করা হয়েছে।\n\nএলাকাবাসী জানান, এই বাতিগুলো স্বয়ংক্রিয়ভাবে সন্ধ্যায় জ্বলে উঠবে এবং ভোর পর্যন্ত নিরবচ্ছিন্ন আলো দেবে। এতে এলাকায় চুরি-ছিনতাইয়ের ভয় দূর হবে।",
+          en: "A long-felt community demand was met as twelve automatic solar LED illumination pillars went operational at Wapdar Matha, eliminating nocturnal accident hazards."
+        },
+        image: "https://images.unsplash.com/photo-1508873696983-2df5293cb325?auto=format&fit=crop&w=800&q=80",
+        author: { bn: "নাগরিক বার্তা", en: "Civic Wire" },
+        date: { bn: "আজ, দুপুর ১২:৩০", en: "Today, 12:30 PM" }
+      },
+      {
+        id: "post_init_3",
+        category: "durga_mondir",
+        badge: { bn: "দুর্গা মন্দির", en: "Durga Mondir" },
+        title: {
+          bn: "দুর্গা মন্দির প্রাঙ্গণে বার্ষিক মিলনমেলা ও স্বেচ্ছায় রক্তদান ক্যাম্প: অংশ নিলেন দুই শতাধিক যুবক",
+          en: "Annual Blood Donation Camp & Harmony Meet at Durga Mondir Grounds Draws 200+ Donors"
+        },
+        summary: {
+          bn: "সম্প্রীতি ও সামাজিক সেবার ব্রত নিয়ে দুর্গা মন্দির চত্বরে দিনব্যাপী ফ্রি মেডিকেল ক্যাম্প ও জরুরি রক্তদান কর্মসূচি সফলভাবে সম্পন্ন হয়েছে।",
+          en: "A full-day community welfare and voluntary blood donation drive at Durga Mondir premises unites over two hundred local volunteers."
+        },
+        fullText: {
+          bn: "বারুণা পশ্চিম পাড়ার ঐতিহ্যবাহী দুর্গা মন্দির প্রাঙ্গণে আজ উৎসবমুখর পরিবেশে অনুষ্ঠিত হলো স্বেচ্ছায় রক্তদান ও বিনামূল্যে রক্তের গ্রুপ নির্ণয় কর্মসূচি। স্থানীয় ক্লাব ও মন্দির কমিটির যৌথ সহযোগিতায় সকাল ৯টা থেকে শুরু হওয়া এই ক্যাম্পে এলাকার বিভিন্ন শ্রেণি-পেশার মানুষ অংশগ্রহণ করেন।\n\nমোট ৭২ ব্যাগ রক্ত খুলনা রেড ক্রিসেন্ট সোসাইটির ব্লাড ব্যাংকে হস্তান্তর করা হয়েছে। মন্দির পরিচালনা পরিষদের সভাপতি জানান, আগামীতেও প্রতি মাসে এমন স্বাস্থ্যসেবামূলক কর্মসূচি অব্যাহত থাকবে।",
+          en: "Over two hundred local youths gathered at the Durga Mondir grounds for an intensive voluntary blood donation camp, collecting 72 bags for local medical emergencies in a grand show of communal solidarity."
+        },
+        image: "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=800&q=80",
+        author: { bn: "সামাজিক ডেস্ক", en: "Community Desk" },
+        date: { bn: "আজ, দুপুর ০২:১৫", en: "Today, 2:15 PM" }
+      },
+      {
+        id: "post_init_4",
+        category: "muktir_dokan",
+        badge: { bn: "মুক্তির দোকান", en: "Muktir Dokan" },
+        title: {
+          bn: "মুক্তির দোকানের তরুণদের উদ্যোগে গণগ্রন্থাগার ও পড়ার ঘরের যাত্রা শুরু",
+          en: "Youths Open Free Reading Library & Study Hub near Muktir Dokan"
+        },
+        summary: {
+          bn: "নতুন প্রজন্মের বই পড়ার অভ্যাস গড়ে তুলতে স্থানীয় তরুণদের নিজস্ব সঞ্চয়ে সংগৃহীত ৫০০ বই নিয়ে যাত্রা শুরু করল উন্মুক্ত লাইব্রেরি।",
+          en: "A youth-driven open library initiative opens doors with over 500 cataloged books, offering free study space for local students."
+        },
+        fullText: {
+          bn: "মোবাইল স্ক্রিনে আসক্তি কাটিয়ে বইয়ের পাতায় তরুণ প্রজন্মকে ফিরিয়ে আনতে মুক্তির দোকান সংলগ্ন একটি কক্ষে গড়ে তোলা হয়েছে উন্মুক্ত গণগ্রন্থাগার। স্থানীয় স্কুলের শিক্ষক ও গণ্যমান্য ব্যক্তিরা বই উপহার দিয়ে এই উদ্যোগে সহযোগিতা করেছেন।",
+          en: "Designed to cultivate deep reading habits among students, local graduates established a complimentary book reading hub near Muktir Dokan."
+        },
+        image: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=800&q=80",
+        author: { bn: "শিক্ষা ও সাহিত্য ডেস্ক", en: "Education Desk" },
+        date: { bn: "আজ, বিকাল ০৩:৪০", en: "Today, 3:40 PM" }
+      }
+    ];
+
+    // Load Articles & Current Lead from LocalStorage (or fall back to initial state)
+    let publicArticles = [];
+    try {
+      const storedArticles = localStorage.getItem('elakar_articles');
+      publicArticles = storedArticles ? JSON.parse(storedArticles) : initialArticles;
+    } catch (e) {
+      publicArticles = initialArticles;
+    }
+
+    // Lead Article ID Tracker (Always points to the latest headline lead)
+    let currentLeadArticleId = localStorage.getItem('elakar_lead_id') || publicArticles[0].id;
+    if (!publicArticles.some(a => a.id === currentLeadArticleId)) {
+      currentLeadArticleId = publicArticles[0].id;
+    }
+
+    // EXPANDED SECRET DOCKETS
+    let secretArticles = [
+      {
+        id: "secret_1",
+        title: {
+          bn: "ফাইল নং ৭২: কেন্দ্রীয় খাদ্য গুদামের গোপন অডিট ও চাল উধাওয়ের নথিপত্র",
+          en: "File #72: Confidential State Silo Audit & Missing Grain Reserves"
+        },
+        preview: {
+          bn: "সরকারি খাদ্য গুদাম থেকে রাতের আঁধারে প্রায় ৮৫০ মেট্রিক টন চাল স্থানান্তরের অভ্যন্তরীণ গোপন নিরীক্ষা রিপোর্ট ফাঁস হয়েছে। এতে শীর্ষ কয়েকজন কর্মকর্তা ও সিন্ডিকেটের স্পষ্ট স্বাক্ষরিত রসিদ পাওয়া গেছে...",
+          en: "Leaked internal audit files reveal unauthorized midnight transfers of over 850 metric tons of emergency government grain with implicated signatures..."
+        },
+        fullContent: {
+          bn: "আমাদের বিশেষ অনুসন্ধান টিম কর্তৃক সংগৃহীত খাদ্য গুদামের গোপন অভ্যন্তরীণ অডিট নথি অনুসারে, গত মে থেকে আগস্ট মাসের মধ্যে গুদামের স্টক রেজিস্টারে কৃত্রিম গরমিল তৈরি করে খাদ্যশস্য খোলা বাজারে বিক্রি করা হয়। এতে সরকারের প্রায় ১২ কোটি টাকার রাজস্ব ক্ষতি হয়েছে। ফাইলে শীর্ষ খাদ্য কর্মকর্তা ও প্রভাবশালী ডিলারদের সমঝোতার গোপন নোট রয়েছে।",
+          en: "According to confidential records acquired by our special investigations desk, ledger manipulations between May and August diverted emergency reserves into wholesale distribution networks, causing significant revenue loss."
+        },
+        classification: "RESTRICTED // লেভেল-১ গোপনীয়",
+        isUnlocked: false
+      },
+      {
+        id: "secret_2",
+        title: {
+          bn: "ডায়েরি কোড-এক্স: নদী তীরবর্তী রাসায়নিক কারখানার গোপন বর্জ্য পাইপলাইনের ব্লুপ্রিন্ট",
+          en: "Docket Code-X: Subsurface Industrial Runoff Blueprints Discovered"
+        },
+        preview: {
+          bn: "পরিদর্শন টিমের চোখ ফাঁকি দিতে নদীর তলদেশ দিয়ে গোপনে তৈরি করা হয়েছিল আড়াই কিলোমিটার দীর্ঘ বিষাক্ত তরল নির্গমন পাইপলাইন। কারখানার সাবেক চিফ ইঞ্জিনিয়ারের স্বীকারোক্তি ও ব্লুপ্রিন্ট...",
+          en: "A covert 2.5-kilometer pipeline deliberately laid 50 feet beneath the riverbed to discharge untreated toxic effluents directly past environmental monitors..."
+        },
+        fullContent: {
+          bn: "অনুসন্ধানে উন্মোচিত মূল ব্লুপ্রিন্ট প্রমাণ করে যে কারখানার মালিকপক্ষ নিয়মিত সরকারি পরিদর্শন ফাঁকি দিতে নদীপৃষ্ঠের ৫০ ফুট গভীরে এই সুড়ঙ্গ পাইপ স্থাপন করেছিল। কারখানার বরখাস্ত হওয়া সাবেক প্রধান প্রকৌশলী একটি স্বাক্ষরিত হলফনামায় বিষয়টি নিশ্চিত করেছেন।",
+          en: "Verified engineering schematics establish that the plant owners secretly laid conduits 50 feet under the river floor to bypass surface surveillance."
+        },
+        classification: "CONFIDENTIAL // লেভেল-২ গোপনীয়",
+        isUnlocked: false
+      }
+    ];
+
+    // Carousel Items (Today's Elaka summaries)
+    const carouselItems = [
+      {
+        id: "car_1",
+        title: { bn: "মুক্তির দোকান মোড়ে বিদ্যুৎ বিভ্রাট নিরসনে নতুন ট্রান্সফরমার চালু", en: "New Power Transformer Commissioned at Muktir Dokan" },
+        tag: { bn: "মুক্তির দোকান", en: "Muktir Dokan" },
+        time: { bn: "১ ঘণ্টা আগে", en: "1 hr ago" },
+        image: "https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?auto=format&fit=crop&w=500&q=80"
+      },
+      {
+        id: "car_2",
+        title: { bn: "ওয়াপদার মাথায় কৃষক সহায়তা ও কৃষি উপকরণ মেলা", en: "Farmers Aid & Agro Machinery Fair at Wapdar Matha" },
+        tag: { bn: "ওয়াপদার মাথা", en: "Wapdar Matha" },
+        time: { bn: "২ ঘণ্টা আগে", en: "2 hrs ago" },
+        image: "https://images.unsplash.com/photo-1592982537447-7440770cbfc9?auto=format&fit=crop&w=500&q=80"
+      },
+      {
+        id: "car_3",
+        title: { bn: "দুর্গা মন্দিরে আসন্ন শারদীয় প্রস্তুতি বিষয়ক মতবিনিময় সভা", en: "Community Preparedness Meeting at Durga Mondir" },
+        tag: { bn: "দুর্গা মন্দির", en: "Durga Mondir" },
+        time: { bn: "৩ ঘণ্টা আগে", en: "3 hrs ago" },
+        image: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=500&q=80"
+      },
+      {
+        id: "car_4",
+        title: { bn: "পশ্চিম পাড়ার তরুণ সমাজের বৃক্ষরোপণ কর্মসূচি সমাপ্ত", en: "Youth Tree Plantation Concludes in Poschim Para" },
+        tag: { bn: "পরিবেশ", en: "Civic" },
+        time: { bn: "৪ ঘণ্টা আগে", en: "4 hrs ago" },
+        image: "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=500&q=80"
+      }
+    ];
+
+    // Secret Requests Admin Queue
+    let secretRequests = [
+      {
+        id: "req_101",
+        secretId: "secret_1",
+        newsTitle: "ফাইল নং ৭২: কেন্দ্রীয় খাদ্য গুদামের গোপন অডিট",
+        userName: "আহমেদ রফিক (আইনজীবী)",
+        userContact: "rafiq.legal@gmail.com",
+        reason: "আইনি পর্যালোচনা ও তথ্য যাচাইয়ের জন্য প্রয়োজন।",
+        status: "pending",
+        time: "১০ মিনিট আগে"
+      }
+    ];
+
+    // Anonymous Tips (Admin only)
+    let confidentialTips = [
+      {
+        id: "tip_801",
+        subject: "ওয়াপদার মাথায় একটি কালভার্টের রেলিং ভাঙা",
+        category: "ওয়াপদার মাথা",
+        details: "ওয়াপদার মাথার কাছাকাছি কালভার্টটির ডানপাশের রেলিং ভেঙে গেছে। রাতে বাইক চালকদের জন্য মারাত্মক ঝুঁকি সৃষ্টি হচ্ছে। দ্রুত মেরামত প্রয়োজন।",
+        sender: "মো. নাজমুল হুদা",
+        contact: "01788-990011",
+        submittedAt: "আজ, সকাল ৯:২০"
+      }
+    ];
+
+    // Helper: Convert digits to Bengali numerals
+    function toBengaliNumerals(str) {
+      const bnDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+      return String(str).replace(/[0-9]/g, w => bnDigits[+w]);
+    }
+
+    // Save articles and lead ID to localStorage
+    function persistData() {
+      try {
+        localStorage.setItem('elakar_articles', JSON.stringify(publicArticles));
+        localStorage.setItem('elakar_lead_id', currentLeadArticleId);
+      } catch (e) {
+        console.warn("Storage sync failed", e);
+      }
+    }
+
+    // 2. LIVE KHULNA TIME & WEATHER ENGINE
+    function startKhulnaLiveClock() {
+      function tick() {
+        const now = new Date();
+        const timeOptions = {
+          timeZone: 'Asia/Dhaka',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hour12: true
+        };
+        const rawTimeStr = now.toLocaleTimeString('en-US', timeOptions);
+        const [timePart, ampm] = rawTimeStr.split(' ');
+        const heroClockEl = document.getElementById('heroLiveKhulnaClock');
+        
+        if (currentLang === 'bn') {
+          const bnTime = toBengaliNumerals(timePart) + ' ' + (ampm === 'PM' ? 'অপরাহ্ন' : 'পূর্বাহ্ন');
+          if (heroClockEl) heroClockEl.textContent = bnTime;
+        } else {
+          if (heroClockEl) heroClockEl.textContent = `${timePart} ${ampm}`;
+        }
+      }
+      tick();
+      setInterval(tick, 1000);
+    }
+
+    function updateKhulnaWeatherUI() {
+      const heroWeather = document.getElementById('heroKhulnaWeatherBadge');
+      if (!heroWeather) return;
+      if (currentLang === 'bn') {
+        heroWeather.textContent = `${toBengaliNumerals(khulnaWeatherData.tempC)}° সে. খুলনা`;
+      } else {
+        heroWeather.textContent = `${khulnaWeatherData.tempC}°C Khulna`;
+      }
+    }
+
+    // 3. THREE.JS AMBIENT 3D NETWORK GLOBE
+    let scene, camera, renderer, globeGroup;
+
+    function initNewsGlobe() {
+      const container = document.getElementById('globeCanvasContainer');
+      if (!container) return;
+
+      const width = container.clientWidth || 320;
+      const height = container.clientHeight || 260;
+
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+      camera.position.z = 19;
+
+      renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      container.innerHTML = '';
+      container.appendChild(renderer.domElement);
+
+      globeGroup = new THREE.Group();
+      scene.add(globeGroup);
+
+      const sphereGeo = new THREE.SphereGeometry(7.2, 26, 26);
+      const wireframeMat = new THREE.MeshBasicMaterial({
+        color: 0x3b82f6,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.28
+      });
+      const sphere = new THREE.Mesh(sphereGeo, wireframeMat);
+      globeGroup.add(sphere);
+
+      const ringGeo1 = new THREE.RingGeometry(8.8, 9.1, 54);
+      const ringMat1 = new THREE.MeshBasicMaterial({
+        color: 0xe11d48,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.55
+      });
+      const ring1 = new THREE.Mesh(ringGeo1, ringMat1);
+      ring1.rotation.x = Math.PI / 2.3;
+      globeGroup.add(ring1);
+
+      const ringGeo2 = new THREE.RingGeometry(10.2, 10.4, 54);
+      const ringMat2 = new THREE.MeshBasicMaterial({
+        color: 0xf59e0b,
+        side: THREE.DoubleSide,
+        transparent: true,
+        opacity: 0.35
+      });
+      const ring2 = new THREE.Mesh(ringGeo2, ringMat2);
+      ring2.rotation.y = Math.PI / 3;
+      ring2.rotation.x = Math.PI / 5;
+      globeGroup.add(ring2);
+
+      const pointsGeo = new THREE.BufferGeometry();
+      const numPoints = 85;
+      const positions = [];
+      for (let i = 0; i < numPoints; i++) {
+        const u = Math.random();
+        const v = Math.random();
+        const theta = u * 2.0 * Math.PI;
+        const phi = Math.acos(2.0 * v - 1.0);
+        const r = 7.3;
+        positions.push(
+          r * Math.sin(phi) * Math.cos(theta),
+          r * Math.sin(phi) * Math.sin(theta),
+          r * Math.cos(phi)
+        );
+      }
+      pointsGeo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+      const pointsMat = new THREE.PointsMaterial({
+        color: 0xf43f5e,
+        size: 0.44,
+        transparent: true,
+        opacity: 0.9
+      });
+      const beacons = new THREE.Points(pointsGeo, pointsMat);
+      globeGroup.add(beacons);
+
+      let isDragging = false;
+      let prevPos = { x: 0, y: 0 };
+
+      container.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        prevPos = { x: e.clientX, y: e.clientY };
+      });
+      window.addEventListener('mouseup', () => { isDragging = false; });
+      container.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const dx = e.clientX - prevPos.x;
+        const dy = e.clientY - prevPos.y;
+        globeGroup.rotation.y += dx * 0.007;
+        globeGroup.rotation.x += dy * 0.007;
+        prevPos = { x: e.clientX, y: e.clientY };
+      });
+
+      function animate() {
+        requestAnimationFrame(animate);
+        if (!isDragging) {
+          globeGroup.rotation.y += 0.0035;
+          globeGroup.rotation.x += 0.001;
+          ring1.rotation.z += 0.0022;
+          ring2.rotation.z -= 0.0018;
+        }
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      window.addEventListener('resize', () => {
+        if (!container) return;
+        const newW = container.clientWidth;
+        const newH = container.clientHeight;
+        camera.aspect = newW / newH;
+        camera.updateProjectionMatrix();
+        renderer.setSize(newW, newH);
+      });
+    }
+
+    // 4. SUBTLE 3D CARD TILT ENGINE
+    function attach3DTiltEffects() {
+      const cards = document.querySelectorAll('.card-3d, .card-3d-secret');
+      cards.forEach(card => {
+        card.addEventListener('mousemove', handleCardTilt);
+        card.addEventListener('mouseleave', resetCardTilt);
+      });
+    }
+
+    function handleCardTilt(e) {
+      const card = e.currentTarget;
+      const rect = card.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      const rotateX = ((y - centerY) / centerY) * -6.5;
+      const rotateY = ((x - centerX) / centerX) * 6.5;
+
+      card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.015, 1.015, 1.015)`;
+    }
+
+    function resetCardTilt(e) {
+      const card = e.currentTarget;
+      card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)`;
+    }
+
+    // 5. RENDERING & UI UPDATES
+    function renderTranslations() {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[key] && translations[key][currentLang]) {
+          el.textContent = translations[key][currentLang];
+        }
+      });
+
+      const navBrand = document.getElementById('navBrandName');
+      const navBadge = document.getElementById('navLocationBadge');
+      const artHeroTitle = document.getElementById('mainArtHeroTitle');
+      const artHeroSub = document.getElementById('mainArtHeroSub');
+      const heroMotto = document.getElementById('heroMottoText');
+      const tickerLabel = document.getElementById('breakingTickerLabel');
+      const footerBrand = document.getElementById('footerBrandTitle');
+
+      if (currentLang === 'bn') {
+        if (navBrand) navBrand.textContent = "এলাকার খবর";
+        if (navBadge) navBadge.textContent = "বারুণা পশ্চিম পাড়া 24/7";
+        if (artHeroTitle) artHeroTitle.textContent = "এলাকার খবর";
+        if (artHeroSub) artHeroSub.textContent = "ELAKAR KHOBOR • POSCHIM PARA";
+        if (heroMotto) heroMotto.textContent = "সত্য ও ন্যায়ের পথে";
+        if (tickerLabel) tickerLabel.textContent = "পশ্চিম পাড়া ব্রেকিং";
+        if (footerBrand) footerBrand.textContent = "এলাকার খবর (ELAKAR KHOBOR)";
+      } else {
+        if (navBrand) navBrand.textContent = "Elakar Khobor";
+        if (navBadge) navBadge.textContent = "BARUNA POSCHIM PARA 24/7";
+        if (artHeroTitle) artHeroTitle.textContent = "Elakar Khobor";
+        if (artHeroSub) artHeroSub.textContent = "ELAKAR KHOBOR • POSCHIM PARA";
+        if (heroMotto) heroMotto.textContent = "ON THE PATH OF TRUTH & JUSTICE";
+        if (tickerLabel) tickerLabel.textContent = "POSCHIM PARA BREAKING";
+        if (footerBrand) footerBrand.textContent = "Elakar Khobor (Baruna Poschim Para)";
+      }
+
+      updateKhulnaWeatherUI();
+    }
+
+    // Dynamically builds the Breaking Ticker directly from all latest articles
+    function renderBreakingTicker() {
+      const tickerElem = document.getElementById('breakingTicker');
+      if (!tickerElem) return;
+
+      const headlines = publicArticles.map(a => {
+        return a.title[currentLang] || a.title.bn;
+      });
+
+      tickerElem.innerHTML = headlines.map(item => `
+        <span class="inline-flex items-center gap-2 cursor-pointer hover:text-brand-rose transition" onclick="showToast('${item.replace(/'/g, "\\'")}')">
+          <span class="text-brand-rose font-black">•</span> ${item}
+        </span>
+      `).join(' &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ');
+    }
+
+    // 6. HERO LEAD STORY: SYNCHRONIZED DIRECTLY TO currentLeadArticleId
+    function renderHero() {
+      const lead = publicArticles.find(a => a.id === currentLeadArticleId) || publicArticles[0];
+      if (!lead) return;
+
+      const hHeadline = document.getElementById('heroHeadline');
+      const hSummary = document.getElementById('heroSummary');
+      const hCategory = document.getElementById('heroLeadCategoryPill');
+      const hTimeText = document.getElementById('heroLeadTimeText');
+
+      if (hHeadline) hHeadline.textContent = lead.title[currentLang] || lead.title.bn;
+      if (hSummary) hSummary.textContent = lead.summary[currentLang] || lead.summary.bn;
+      if (hCategory) hCategory.textContent = lead.badge[currentLang] || lead.badge.bn;
+      if (hTimeText) hTimeText.textContent = lead.date[currentLang] || lead.date.bn;
+    }
+
+    function openHeroLeadArticle() {
+      openArticleModal(currentLeadArticleId);
+    }
+
+    function renderCarousel() {
+      const container = document.getElementById('carouselContainer');
+      if (!container) return;
+      container.innerHTML = carouselItems.map(item => `
+        <div onclick="showToast('${currentLang === 'bn' ? 'সংবাদ লোড হচ্ছে...' : 'Loading dispatch...' }')" 
+             class="flex-shrink-0 w-64 sm:w-72 bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-800 rounded-2xl overflow-hidden hover:border-brand-rose/50 transition-all duration-300 transform hover:-translate-y-1 cursor-pointer group shadow-lg">
+          <div class="h-28 w-full overflow-hidden relative">
+            <img src="${item.image}" alt="${item.title[currentLang]}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" onerror="this.src='https://placehold.co/400x200/0f172a/ffffff?text=Headline'">
+            <span class="absolute top-2 left-2 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-900/90 text-slate-200 border border-slate-700 uppercase">${item.tag[currentLang]}</span>
+          </div>
+          <div class="p-3.5 space-y-1.5">
+            <h4 class="text-xs sm:text-sm font-bold text-white line-clamp-2 group-hover:text-brand-rose transition-colors">
+              ${item.title[currentLang]}
+            </h4>
+            <div class="flex items-center justify-between text-[11px] text-slate-400 pt-1">
+              <span>${item.time[currentLang]}</span>
+              <span class="text-brand-rose font-semibold group-hover:underline flex items-center gap-0.5">
+                ${currentLang === 'bn' ? 'পড়ুন' : 'Read'} →
+              </span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function scrollNewsCarousel(direction) {
+      const container = document.getElementById('carouselContainer');
+      if (container) {
+        container.scrollBy({ left: direction * 280, behavior: 'smooth' });
+      }
+    }
+
+    // Public News Category Filter
+    function filterPublicCategory(cat) {
+      activePublicCat = cat;
+      document.querySelectorAll('.cat-pill').forEach(btn => {
+        if (btn.getAttribute('data-cat') === cat) {
+          btn.classList.add('bg-brand-crimson', 'text-white', 'font-bold');
+          btn.classList.remove('text-slate-400', 'font-medium');
+        } else {
+          btn.classList.remove('bg-brand-crimson', 'text-white', 'font-bold');
+          btn.classList.add('text-slate-400', 'font-medium');
+        }
+      });
+      renderPublicNews();
+    }
+
+    // Public News Renderer
+    function renderPublicNews() {
+      const grid = document.getElementById('publicNewsGrid');
+      if (!grid) return;
+
+      // Filter out the hero lead item so there is no duplicate on the main grid
+      const filtered = publicArticles.filter(item => {
+        if (item.id === currentLeadArticleId) return false;
+        if (activePublicCat === 'all') return true;
+        return item.category === activePublicCat;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="md:col-span-2 p-8 text-center bg-slate-900/60 rounded-3xl border border-slate-800 text-slate-400 text-xs">
+            ${currentLang === 'bn' ? 'এই বিভাগে বর্তমানে আর কোনো সংবাদ নেই।' : 'No other stories found in this section.'}
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(item => `
+        <article onclick="openArticleModal('${item.id}')" class="card-3d rounded-3xl overflow-hidden cursor-pointer group flex flex-col justify-between">
+          <div class="content-3d">
+            <div class="h-48 w-full overflow-hidden relative">
+              <img src="${item.image}" alt="${item.title[currentLang] || item.title.bn}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x350/0f172a/ffffff?text=News'">
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-transparent"></div>
+              <span class="absolute top-3.5 left-3.5 px-3 py-1 rounded-full text-xs font-bold bg-slate-950/80 text-rose-300 border border-rose-500/30 backdrop-blur shadow">
+                ${item.badge[currentLang] || item.badge.bn}
+              </span>
+            </div>
+            
+            <div class="p-5 sm:p-6 space-y-3">
+              <div class="flex items-center gap-2 text-xs text-slate-400">
+                <i data-lucide="clock" class="w-3.5 h-3.5 text-brand-rose"></i>
+                <span>${item.date[currentLang] || item.date.bn}</span>
+              </div>
+              <h3 class="text-base sm:text-lg font-bold text-white group-hover:text-brand-rose transition-colors leading-snug">
+                ${item.title[currentLang] || item.title.bn}
+              </h3>
+              <p class="text-xs sm:text-sm text-slate-300 line-clamp-3 leading-relaxed">
+                ${item.summary[currentLang] || item.summary.bn}
+              </p>
+            </div>
+          </div>
+
+          <div class="px-5 sm:px-6 pb-5 pt-3 border-t border-slate-800/80 flex items-center justify-between text-xs content-3d">
+            <span class="text-slate-400 font-medium truncate max-w-[150px]">${item.author[currentLang] || item.author.bn}</span>
+            <span class="inline-flex items-center gap-1 font-bold text-brand-rose group-hover:translate-x-1 transition-transform">
+              ${currentLang === 'bn' ? 'সম্পূর্ণ পড়ুন' : 'Read Full'} 
+              <i data-lucide="chevron-right" class="w-4 h-4"></i>
+            </span>
+          </div>
+        </article>
+      `).join('');
+
+      lucide.createIcons();
+      attach3DTiltEffects();
+    }
+
+    // Secret Room Renderer
+    function renderSecretNews() {
+      const container = document.getElementById('secretNewsList');
+      if (!container) return;
+
+      container.innerHTML = secretArticles.map(sec => {
+        if (sec.isUnlocked) {
+          return `
+            <div class="card-3d-secret border-2 border-emerald-500/60 rounded-3xl p-5 sm:p-6 space-y-4">
+              <div class="flex items-center justify-between">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
+                  <i data-lucide="unlock" class="w-3.5 h-3.5"></i>
+                  ${currentLang === 'bn' ? 'অনুমোদিত ও উন্মুক্ত' : 'ACCESS GRANTED'}
+                </span>
+                <span class="text-[11px] font-mono text-slate-400">${sec.classification}</span>
+              </div>
+              
+              <h4 class="text-base font-bold text-white leading-snug">${sec.title[currentLang]}</h4>
+              
+              <div class="text-xs sm:text-sm text-slate-200 leading-relaxed border-l-2 border-emerald-500 pl-4 py-1 bg-emerald-950/20 rounded-r-xl">
+                ${sec.fullContent[currentLang]}
+              </div>
+
+              <div class="flex items-center justify-between text-xs text-emerald-400 pt-2 border-t border-slate-800">
+                <span class="flex items-center gap-1.5">
+                  <i data-lucide="shield-check" class="w-4 h-4"></i> 
+                  ${currentLang === 'bn' ? 'এডমিন অনুমোদিত নথি' : 'Clearance Verified'}
+                </span>
+                <button onclick="lockSecretStory('${sec.id}')" class="text-xs text-slate-400 hover:text-rose-400 underline">
+                  ${currentLang === 'bn' ? 'পুনরায় লক করুন' : 'Lock Docket'}
+                </button>
+              </div>
+            </div>
+          `;
+        } else {
+          return `
+            <div class="card-3d-secret rounded-3xl p-5 sm:p-6 relative overflow-hidden group">
+              <div class="flex items-center justify-between mb-3">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-mono font-bold bg-amber-500/10 text-amber-300 border border-amber-500/30">
+                  <i data-lucide="lock" class="w-3 h-3 text-amber-400"></i>
+                  ${sec.classification}
+                </span>
+                <span class="text-[11px] text-amber-400 font-bold uppercase animate-pulse">Classified</span>
+              </div>
+
+              <h4 class="text-base font-bold text-white mb-2 leading-snug">${sec.title[currentLang]}</h4>
+
+              <div class="relative py-2 px-1">
+                <p class="text-xs text-slate-400 select-none filter blur-[4px] leading-relaxed transition-all duration-300 group-hover:blur-[3px]">
+                  ${sec.preview[currentLang]}
+                </p>
+                <div class="absolute inset-0 flex items-center justify-center bg-slate-950/40 backdrop-blur-[1px] rounded-xl">
+                  <span class="text-xs font-bold text-amber-300 flex items-center gap-1.5 bg-slate-900/90 px-3.5 py-1.5 rounded-full border border-amber-500/40 shadow-lg">
+                    <i data-lucide="eye-off" class="w-3.5 h-3.5"></i>
+                    ${currentLang === 'bn' ? 'নথি লক করা আছে' : 'Clearance Required'}
+                  </span>
+                </div>
+              </div>
+
+              <div class="mt-4 pt-3 border-t border-slate-800/80 flex items-center justify-between">
+                <span class="text-xs text-slate-400">${currentLang === 'bn' ? 'পড়ার বিশেষ অনুমোদন আবশ্যক' : 'Official clearance needed'}</span>
+                <button onclick="openRequestSecretModal('${sec.id}')" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-black text-xs transition shadow-md shadow-amber-500/20">
+                  <i data-lucide="key" class="w-3.5 h-3.5"></i>
+                  <span>${currentLang === 'bn' ? 'পড়ার অনুমতি চান' : 'Request Access'}</span>
+                </button>
+              </div>
+            </div>
+          `;
+        }
+      }).join('');
+
+      lucide.createIcons();
+      attach3DTiltEffects();
+    }
+
+    function lockSecretStory(id) {
+      const item = secretArticles.find(s => s.id === id);
+      if (item) {
+        item.isUnlocked = false;
+        renderSecretNews();
+        showToast(currentLang === 'bn' ? 'ফাইলটি পুনরায় লক করা হয়েছে।' : 'Story locked.');
+      }
+    }
+
+    // Modal Control: Article Reader
+    function openArticleModal(id) {
+      const article = publicArticles.find(a => a.id === id);
+      if (!article) return;
+
+      document.getElementById('modalCoverImage').src = article.image;
+      document.getElementById('modalCategoryBadge').textContent = article.badge[currentLang] || article.badge.bn;
+      document.getElementById('modalDate').textContent = article.date[currentLang] || article.date.bn;
+      document.getElementById('modalTitle').textContent = article.title[currentLang] || article.title.bn;
+      document.getElementById('modalAuthor').textContent = article.author[currentLang] || article.author.bn;
+      
+      const contentElem = document.getElementById('modalContent');
+      const textToSplit = article.fullText[currentLang] || article.fullText.bn;
+      const paragraphs = textToSplit.split('\n\n');
+      contentElem.innerHTML = paragraphs.map(p => `<p class="leading-relaxed text-slate-200 text-sm sm:text-base">${p}</p>`).join('');
+
+      const modal = document.getElementById('articleModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+      lucide.createIcons();
+    }
+
+    function closeArticleModal() {
+      const modal = document.getElementById('articleModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = 'auto';
+    }
+
+    function copyArticleLink() {
+      const dummyUrl = window.location.href.split('#')[0] + "#story-read";
+      const tempInput = document.createElement("input");
+      tempInput.value = dummyUrl;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand("copy");
+      document.body.removeChild(tempInput);
+      showToast(currentLang === 'bn' ? "সংবাদের লিংক কপি করা হয়েছে!" : "Article link copied!");
+    }
+
+    // Modal Control: Request Secret Access
+    function openRequestSecretModal(secretId) {
+      const item = secretArticles.find(s => s.id === secretId);
+      if (!item) return;
+
+      document.getElementById('requestSecretId').value = secretId;
+      document.getElementById('requestModalNewsTitle').textContent = item.title[currentLang];
+      
+      const modal = document.getElementById('requestSecretModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      lucide.createIcons();
+    }
+
+    function closeRequestSecretModal() {
+      const modal = document.getElementById('requestSecretModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function submitSecretAccessRequest(event) {
+      event.preventDefault();
+      const secretId = document.getElementById('requestSecretId').value;
+      const userName = document.getElementById('reqUserName').value.trim();
+      const contact = document.getElementById('reqUserContact').value.trim();
+      const reason = document.getElementById('reqUserReason').value.trim();
+
+      const secretStory = secretArticles.find(s => s.id === secretId);
+
+      const newReq = {
+        id: "req_" + Date.now(),
+        secretId: secretId,
+        newsTitle: secretStory ? secretStory.title[currentLang] : "Classified Docket",
+        userName: userName,
+        userContact: contact,
+        reason: reason || (currentLang === 'bn' ? "পশ্চিম পাড়া তথ্য অনুসন্ধান" : "Research & Verification"),
+        status: "pending",
+        time: currentLang === 'bn' ? "এইমাত্র" : "Just now"
+      };
+
+      secretRequests.unshift(newReq);
+      updatePendingBadges();
+      closeRequestSecretModal();
+
+      showToast(currentLang === 'bn' 
+        ? "আপনার অনুরোধ এডমিনের কাছে পাঠানো হয়েছে! অনুমোদন দিলে সঙ্গে সঙ্গে পড়তে পারবেন।" 
+        : "Clearance request dispatched to Admin Desk!");
+
+      document.getElementById('secretRequestForm').reset();
+    }
+
+    // Modal Control: Submit Citizen News ("আপনার খবর দিন")
+    function openTipModal() {
+      const modal = document.getElementById('tipModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      lucide.createIcons();
+    }
+
+    function closeTipModal() {
+      const modal = document.getElementById('tipModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function handleTipSubmit(event) {
+      event.preventDefault();
+      const subject = document.getElementById('tipSubject').value.trim();
+      const location = document.getElementById('tipLocationSelect').value;
+      const details = document.getElementById('tipDetails').value.trim();
+      const sender = document.getElementById('tipSender').value.trim() || (currentLang === 'bn' ? "সাধারণ নাগরিক" : "Citizen Contributor");
+      const contact = document.getElementById('tipContact').value.trim() || (currentLang === 'bn' ? "গোপন রাখা হয়েছে" : "Withheld");
+
+      const newTip = {
+        id: "tip_" + Date.now(),
+        subject: subject,
+        category: location,
+        details: details,
+        sender: sender,
+        contact: contact,
+        submittedAt: currentLang === 'bn' ? "এইমাত্র" : "Just now"
+      };
+
+      confidentialTips.unshift(newTip);
+      updatePendingBadges();
+      closeTipModal();
+      document.getElementById('tipSubmissionForm').reset();
+
+      showToast(currentLang === 'bn'
+        ? "আপনার সংবাদটি নিরাপদে এডমিন ডেস্কে জমা হয়েছে। ধন্যবাদ!"
+        : "Your report has been securely submitted to the Admin Desk!");
+    }
+
+    // 7. RESTRICTED ADMIN VAULT & PUBLISHING STUDIO (OWNER ONLY)
+    function initiateAdminGate() {
+      if (isAdminAuthenticated) {
+        openAdminPanel();
+      } else {
+        openAdminAuthModal();
+      }
+    }
+
+    function openAdminAuthModal() {
+      const modal = document.getElementById('adminAuthModal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.getElementById('adminPasscode').value = '';
+      setTimeout(() => document.getElementById('adminPasscode').focus(), 150);
+      lucide.createIcons();
+    }
+
+    function closeAdminAuthModal() {
+      const modal = document.getElementById('adminAuthModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function handleAdminLogin(event) {
+      event.preventDefault();
+      const code = document.getElementById('adminPasscode').value.trim();
+
+      if (ADMIN_PASSCODES.includes(code)) {
+        isAdminAuthenticated = true;
+        closeAdminAuthModal();
+        openAdminPanel();
+        showToast(currentLang === 'bn' ? "স্বাগতম এডমিন! পাবলিশিং স্টুডিও আনলক হয়েছে।" : "Welcome Admin! Publishing Studio Unlocked.");
+      } else {
+        showToast(currentLang === 'bn' ? "ভুল পাসকোড! শুধুমাত্র অনুমোদিত এডমিন।" : "Access Denied: Invalid Passcode.");
+      }
+    }
+
+    function handleAdminLogout() {
+      isAdminAuthenticated = false;
+      closeAdminPanel();
+      showToast(currentLang === 'bn' ? "এডমিন সেশন সফলভাবে লগআউট হয়েছে।" : "Admin session logged out safely.");
+    }
+
+    function openAdminPanel() {
+      const panel = document.getElementById('adminPanelModal');
+      panel.classList.remove('hidden');
+      panel.classList.add('flex');
+      switchAdminTab('publish');
+      renderAdminRequests();
+      renderAdminTips();
+      lucide.createIcons();
+    }
+
+    function closeAdminPanel() {
+      const panel = document.getElementById('adminPanelModal');
+      panel.classList.add('hidden');
+      panel.classList.remove('flex');
+    }
+
+    function switchAdminTab(tab) {
+      const tabPublish = document.getElementById('adminTabPublishContent');
+      const tabReq = document.getElementById('adminTabRequestsContent');
+      const tabTips = document.getElementById('adminTabTipsContent');
+
+      const btnPublish = document.getElementById('tabBtnPublish');
+      const btnReq = document.getElementById('tabBtnRequests');
+      const btnTips = document.getElementById('tabBtnTips');
+
+      // Hide all tabs
+      tabPublish.classList.add('hidden');
+      tabReq.classList.add('hidden');
+      tabTips.classList.add('hidden');
+
+      btnPublish.className = "px-4 py-2 border-b-2 border-transparent text-slate-400 hover:text-white text-xs font-bold flex items-center gap-2 whitespace-nowrap";
+      btnReq.className = "px-4 py-2 border-b-2 border-transparent text-slate-400 hover:text-white text-xs font-bold flex items-center gap-2 whitespace-nowrap";
+      btnTips.className = "px-4 py-2 border-b-2 border-transparent text-slate-400 hover:text-white text-xs font-bold flex items-center gap-2 whitespace-nowrap";
+
+      if (tab === 'publish') {
+        tabPublish.classList.remove('hidden');
+        btnPublish.className = "px-4 py-2 border-b-2 border-brand-crimson text-brand-rose text-xs font-bold flex items-center gap-2 whitespace-nowrap";
+      } else if (tab === 'requests') {
+        tabReq.classList.remove('hidden');
+        btnReq.className = "px-4 py-2 border-b-2 border-amber-400 text-amber-400 text-xs font-bold flex items-center gap-2 whitespace-nowrap";
+      } else {
+        tabTips.classList.remove('hidden');
+        btnTips.className = "px-4 py-2 border-b-2 border-brand-crimson text-brand-rose text-xs font-bold flex items-center gap-2 whitespace-nowrap";
+      }
+    }
+
+    // Helper preset images for quick selection in admin studio
+    function setPresetImg(type) {
+      const imgInput = document.getElementById('adminPostImage');
+      if (type === 1) imgInput.value = "https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?auto=format&fit=crop&w=1200&q=80";
+      if (type === 2) imgInput.value = "https://images.unsplash.com/photo-1508873696983-2df5293cb325?auto=format&fit=crop&w=800&q=80";
+      if (type === 3) imgInput.value = "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=800&q=80";
+    }
+
+    // =========================================================================
+    // 8. AUTO-SET AS "সর্বশেষ প্রধান প্রতিবেদন" (MAIN LEAD) PUBLISHING LOGIC
+    // =========================================================================
+    function handleAdminPublishArticle(event) {
+      event.preventDefault();
+      
+      const title = document.getElementById('adminPostTitle').value.trim();
+      const category = document.getElementById('adminPostCategory').value;
+      const summary = document.getElementById('adminPostSummary').value.trim();
+      const fullText = document.getElementById('adminPostFullText').value.trim();
+      let image = document.getElementById('adminPostImage').value.trim();
+      const author = document.getElementById('adminPostAuthor').value.trim() || "পশ্চিম পাড়া ব্যুরো";
+      const setAsMainLead = document.getElementById('adminCheckSetLead').checked;
+
+      if (!image) {
+        image = "https://images.unsplash.com/photo-1508873696983-2df5293cb325?auto=format&fit=crop&w=1200&q=80";
+      }
+
+      // Map landmark category badges
+      const categoryMap = {
+        muktir_dokan: { bn: "মুক্তির দোকান", en: "Muktir Dokan" },
+        obdar_matha: { bn: "ওয়াপদার মাথা", en: "Wapdar Matha" },
+        durga_mondir: { bn: "দুর্গা মন্দির", en: "Durga Mondir" },
+        general: { bn: "পশ্চিম পাড়া বিশেষ", en: "Poschim Para Wire" }
+      };
+
+      const newArticleId = "post_" + Date.now();
+
+      const newArticle = {
+        id: newArticleId,
+        category: category,
+        badge: categoryMap[category] || categoryMap.general,
+        title: {
+          bn: title,
+          en: title
+        },
+        summary: {
+          bn: summary,
+          en: summary
+        },
+        fullText: {
+          bn: fullText,
+          en: fullText
+        },
+        image: image,
+        author: {
+          bn: author,
+          en: author
+        },
+        date: {
+          bn: "এইমাত্র আপডেট",
+          en: "Just updated"
+        }
+      };
+
+      // 1. Add directly to top of articles array
+      publicArticles.unshift(newArticle);
+
+      // 2. AUTOMATICALLY BECOME 'সর্বশেষ প্রধান প্রতিবেদন' (LATEST LEAD ARTICLE)
+      if (setAsMainLead) {
+        currentLeadArticleId = newArticleId;
+      }
+
+      // 3. Persist and refresh UI
+      persistData();
+      renderHero();
+      renderBreakingTicker();
+      renderPublicNews();
+
+      document.getElementById('adminPostNewsForm').reset();
+      document.getElementById('adminCheckSetLead').checked = true;
+      closeAdminPanel();
+
+      showToast(currentLang === 'bn' 
+        ? "সংবাদটি সফলভাবে প্রকাশিত হয়েছে এবং 'সর্বশেষ প্রধান প্রতিবেদন' হিসেবে যুক্ত হয়েছে!" 
+        : "Article published & promoted to Latest Lead Headline!");
+
+      // Scroll smoothly to Hero
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Direct Lead Promotion for any existing article or tip
+    function promoteArticleToHeroLead(articleId) {
+      currentLeadArticleId = articleId;
+      persistData();
+      renderHero();
+      renderPublicNews();
+      renderBreakingTicker();
+      showToast(currentLang === 'bn' 
+        ? "খবরটিকে 'সর্বশেষ প্রধান প্রতিবেদন' হিসেবে সেট করা হয়েছে!" 
+        : "Promoted to Main Lead Headline!");
+    }
+
+    function renderAdminRequests() {
+      const list = document.getElementById('adminRequestsList');
+      if (!list) return;
+
+      if (secretRequests.length === 0) {
+        list.innerHTML = `<div class="p-6 text-center text-slate-500 text-xs">${currentLang === 'bn' ? 'কোনো অনুরোধ জমা নেই।' : 'No pending clearance requests.'}</div>`;
+        return;
+      }
+
+      list.innerHTML = secretRequests.map(req => `
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div class="space-y-1.5">
+            <div class="flex items-center gap-2">
+              <span class="text-xs font-bold text-amber-400">${req.userName}</span>
+              <span class="text-[10px] text-slate-400 bg-slate-950 px-2 py-0.5 rounded">${req.time}</span>
+              ${req.status === 'approved' 
+                ? '<span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded font-bold border border-emerald-500/30">অনুমোদিত (Approved)</span>' 
+                : '<span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded font-bold border border-amber-500/30">অপেক্ষমাণ (Pending)</span>'}
+            </div>
+            <p class="text-xs font-semibold text-white">${req.newsTitle}</p>
+            <p class="text-[11px] text-slate-400">যোগাযোগ: <span class="text-slate-200 font-mono">${req.userContact}</span> | কারণ: "${req.reason}"</p>
+          </div>
+
+          <div class="flex items-center gap-2 shrink-0 self-end sm:self-center">
+            ${req.status === 'pending' ? `
+              <button onclick="approveSecretRequest('${req.id}', '${req.secretId}')" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs flex items-center gap-1.5 shadow transition">
+                <i data-lucide="check-circle-2" class="w-4 h-4"></i>
+                <span>অনুমোদন দিন (Approve)</span>
+              </button>
+              <button onclick="rejectSecretRequest('${req.id}')" class="px-2.5 py-1.5 rounded-xl bg-slate-950 hover:bg-rose-900/60 text-slate-400 hover:text-rose-300 text-xs transition border border-slate-800">
+                বাতিল
+              </button>
+            ` : `
+              <button onclick="revokeSecretAccess('${req.id}', '${req.secretId}')" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-medium border border-slate-700 transition">
+                অনুমোদন বাতিল
+              </button>
+            `}
+          </div>
+        </div>
+      `).join('');
+
+      lucide.createIcons();
+    }
+
+    function approveSecretRequest(reqId, secretId) {
+      const req = secretRequests.find(r => r.id === reqId);
+      if (req) req.status = 'approved';
+
+      const secret = secretArticles.find(s => s.id === secretId);
+      if (secret) secret.isUnlocked = true;
+
+      updatePendingBadges();
+      renderAdminRequests();
+      renderSecretNews();
+
+      showToast(currentLang === 'bn' 
+        ? "অনুরোধ অনুমোদন করা হয়েছে! গোপন সংবাদটি ৩ডি আনলক করা হয়েছে।" 
+        : "Clearance approved! Story unlocked in 3D.");
+    }
+
+    function revokeSecretAccess(reqId, secretId) {
+      const req = secretRequests.find(r => r.id === reqId);
+      if (req) req.status = 'pending';
+
+      const secret = secretArticles.find(s => s.id === secretId);
+      if (secret) secret.isUnlocked = false;
+
+      updatePendingBadges();
+      renderAdminRequests();
+      renderSecretNews();
+
+      showToast(currentLang === 'bn' ? "অনুমোদন প্রত্যাহার করা হয়েছে।" : "Clearance revoked.");
+    }
+
+    function rejectSecretRequest(reqId) {
+      secretRequests = secretRequests.filter(r => r.id !== reqId);
+      updatePendingBadges();
+      renderAdminRequests();
+      showToast(currentLang === 'bn' ? "অনুরোধ বাতিল করা হয়েছে।" : "Request dismissed.");
+    }
+
+    function renderAdminTips() {
+      const list = document.getElementById('adminTipsList');
+      if (!list) return;
+
+      if (confidentialTips.length === 0) {
+        list.innerHTML = `<div class="p-6 text-center text-slate-500 text-xs">${currentLang === 'bn' ? 'কোনো সংবাদ জমা নেই।' : 'No submissions found.'}</div>`;
+        return;
+      }
+
+      list.innerHTML = confidentialTips.map(tip => `
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <span class="text-[11px] font-bold text-rose-400 bg-rose-500/10 px-2.5 py-0.5 rounded border border-rose-500/30">
+              ${tip.category}
+            </span>
+            <span class="text-[10px] text-slate-400">${tip.submittedAt}</span>
+          </div>
+
+          <h5 class="text-sm font-bold text-white">${tip.subject}</h5>
+          <p class="text-xs text-slate-300 leading-relaxed bg-slate-950/70 p-3 rounded-xl border border-slate-800">
+            ${tip.details}
+          </p>
+
+          <div class="pt-2 border-t border-slate-800 flex items-center justify-between text-[11px] text-slate-400">
+            <span>প্রেরক: <strong class="text-white">${tip.sender}</strong></span>
+            <div class="flex items-center gap-2">
+              <button onclick="convertTipToNews('${tip.id}')" class="px-3 py-1 rounded-lg bg-brand-crimson hover:bg-rose-600 text-white font-bold text-[11px] flex items-center gap-1">
+                <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+                প্রধান প্রতিবেদন বানান
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      lucide.createIcons();
+    }
+
+    // Convert tip straight into main published lead
+    function convertTipToNews(tipId) {
+      const tip = confidentialTips.find(t => t.id === tipId);
+      if (!tip) return;
+
+      const newArticleId = "post_tip_" + Date.now();
+      const newArticle = {
+        id: newArticleId,
+        category: tip.category === "ওয়াপদার মাথা" ? "obdar_matha" : (tip.category === "দুর্গা মন্দির" ? "durga_mondir" : "muktir_dokan"),
+        badge: { bn: tip.category, en: tip.category },
+        title: { bn: tip.subject, en: tip.subject },
+        summary: { bn: tip.details.substring(0, 140) + '...', en: tip.details.substring(0, 140) + '...' },
+        fullText: { bn: tip.details + "\n\nপ্রতিবেদক: " + tip.sender, en: tip.details + "\n\nReporter: " + tip.sender },
+        image: "https://images.unsplash.com/photo-1508873696983-2df5293cb325?auto=format&fit=crop&w=1200&q=80",
+        author: { bn: tip.sender, en: tip.sender },
+        date: { bn: "এইমাত্র", en: "Just now" }
+      };
+
+      publicArticles.unshift(newArticle);
+      currentLeadArticleId = newArticleId; // Auto promoted to main lead
+      persistData();
+
+      confidentialTips = confidentialTips.filter(t => t.id !== tipId);
+      updatePendingBadges();
+
+      renderHero();
+      renderPublicNews();
+      renderBreakingTicker();
+      closeAdminPanel();
+
+      showToast(currentLang === 'bn' 
+        ? "টিপটি সরাসরি 'সর্বশেষ প্রধান প্রতিবেদন' হিসেবে প্রকাশিত হয়েছে!" 
+        : "Report published directly as the Lead Article!");
+    }
+
+    function updatePendingBadges() {
+      const pendingReqCount = secretRequests.filter(r => r.status === 'pending').length;
+      const tipsCount = confidentialTips.length;
+
+      const badgeReq = document.getElementById('badgeAdminRequests');
+      const badgeTip = document.getElementById('badgeAdminTips');
+
+      if (badgeReq) badgeReq.textContent = pendingReqCount;
+      if (badgeTip) badgeTip.textContent = tipsCount;
+    }
+
+    // 9. BILINGUAL LANGUAGE SWITCHER (Bangla default)
+    function switchLanguage(lang) {
+      currentLang = lang;
+
+      const btnBn = document.getElementById('btnLangBn');
+      const btnEn = document.getElementById('btnLangEn');
+
+      if (lang === 'bn') {
+        btnBn.classList.add('bg-brand-crimson', 'text-white');
+        btnBn.classList.remove('text-slate-400');
+        btnEn.classList.remove('bg-brand-crimson', 'text-white');
+        btnEn.classList.add('text-slate-400');
+      } else {
+        btnEn.classList.add('bg-brand-crimson', 'text-white');
+        btnEn.classList.remove('text-slate-400');
+        btnBn.classList.remove('bg-brand-crimson', 'text-white');
+        btnBn.classList.add('text-slate-400');
+      }
+
+      renderTranslations();
+      renderBreakingTicker();
+      renderHero();
+      renderCarousel();
+      renderPublicNews();
+      renderSecretNews();
+
+      showToast(lang === 'bn' ? "ভাষা বাংলায় পরিবর্তিত হয়েছে।" : "Switched to English edition.");
+    }
+
+    // Toast helper
+    let toastTimer;
+    function showToast(msg) {
+      const toast = document.getElementById('customToast');
+      const msgElem = document.getElementById('toastMessage');
+      if (!toast || !msgElem) return;
+
+      clearTimeout(toastTimer);
+      msgElem.textContent = msg;
+      toast.classList.remove('translate-y-24', 'opacity-0');
+      toast.classList.add('translate-y-0', 'opacity-100');
+
+      toastTimer = setTimeout(() => {
+        toast.classList.remove('translate-y-0', 'opacity-100');
+        toast.classList.add('translate-y-24', 'opacity-0');
+      }, 3400);
+    }
+
+    // Ping simulator
+    setInterval(() => {
+      const ping = document.getElementById('pingCounter');
+      if (ping) {
+        ping.textContent = Math.floor(28 + Math.random() * 12);
+      }
+    }, 4500);
+
+    // Keyboard Shortcuts: ESC to close, Ctrl+Shift+A for Admin Vault
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeArticleModal();
+        closeTipModal();
+        closeRequestSecretModal();
+        closeAdminAuthModal();
+        closeAdminPanel();
+      }
+      if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+        e.preventDefault();
+        initiateAdminGate();
+      }
+    });
+
+    // 10. INITIALIZATION ON LOAD (Bengali first)
+    window.onload = function () {
+      initNewsGlobe();
+      startKhulnaLiveClock();
+      renderTranslations();
+      renderBreakingTicker();
+      renderHero();
+      renderCarousel();
+      renderPublicNews();
+      renderSecretNews();
+      updatePendingBadges();
+      lucide.createIcons();
+    };
+  </script>
+</body>
+</html>
